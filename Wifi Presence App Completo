@@ -1,0 +1,1101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WiFi Presence - Conecte-se com pessoas na mesma rede</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            min-height: 100vh;
+            color: #1e293b;
+        }
+
+        .app-container {
+            max-width: 400px;
+            margin: 0 auto;
+            min-height: 100vh;
+            background: white;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        /* Tela de Login */
+        .login-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .logo-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .app-title {
+            font-size: 2rem;
+            font-weight: bold;
+            color: #1e40af;
+            margin-bottom: 0.5rem;
+        }
+
+        .app-subtitle {
+            color: #64748b;
+            font-size: 1rem;
+            margin-bottom: 3rem;
+        }
+
+        .btn {
+            width: 100%;
+            max-width: 280px;
+            padding: 1rem;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            margin-bottom: 1rem;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background: #3b82f6;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #2563eb;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #3b82f6;
+            border: 2px solid #3b82f6;
+        }
+
+        .btn-secondary:hover {
+            background: #f0f9ff;
+        }
+
+        /* Tela Home */
+        .home-screen {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: white;
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .header-subtitle {
+            font-size: 0.75rem;
+            color: #64748b;
+        }
+
+        .header-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .settings-btn, .logout-btn {
+            padding: 0.5rem;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 0.9rem;
+        }
+
+        .settings-btn {
+            background: transparent;
+        }
+
+        .logout-btn {
+            background: #fee2e2;
+            color: #dc2626;
+            font-weight: 600;
+        }
+
+        .content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 1.5rem;
+        }
+
+        .status-container {
+            background: #dbeafe;
+            padding: 1rem;
+            border-radius: 12px;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+        }
+
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            background: #22c55e;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+
+        .status-text {
+            color: #1e40af;
+            font-weight: 600;
+        }
+
+        /* Cards de Usuário */
+        .user-card {
+            background: white;
+            border-radius: 12px;
+            padding: 1.25rem;
+            margin-bottom: 1rem;
+            border: 2px solid #f1f5f9;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+
+        .user-card.current-user {
+            border-color: #bfdbfe;
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 0.75rem;
+            border: 2px solid #e5e7eb;
+        }
+
+        .user-avatar-placeholder {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: #f3f4f6;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 0.75rem;
+            border: 2px solid #e5e7eb;
+            font-size: 1.5rem;
+        }
+
+        .user-name {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .user-badge {
+            font-size: 0.75rem;
+            color: #3b82f6;
+        }
+
+        .user-about {
+            color: #4b5563;
+            font-size: 0.9rem;
+            margin-bottom: 0.75rem;
+            line-height: 1.4;
+        }
+
+        .user-details {
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+
+        .user-detail-item {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .detail-icon {
+            margin-right: 0.5rem;
+            margin-top: 0.1rem;
+        }
+
+        .user-social {
+            display: flex;
+            gap: 0.75rem;
+            margin-top: 0.75rem;
+            padding-top: 0.75rem;
+            border-top: 1px solid #f1f5f9;
+        }
+
+        .social-btn {
+            display: flex;
+            align-items: center;
+            gap: 0.25rem;
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+        }
+
+        .whatsapp-btn {
+            background: #dcfce7;
+            color: #16a34a;
+        }
+
+        .instagram-btn {
+            background: #fdf2f8;
+            color: #be185d;
+        }
+
+        /* Tela de Configurações */
+        .settings-screen {
+            height: 100vh;
+            background: #f8fafc;
+        }
+
+        .settings-header {
+            background: white;
+            padding: 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .settings-title {
+            font-size: 1.25rem;
+            font-weight: bold;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #6b7280;
+        }
+
+        .settings-content {
+            padding: 1.5rem;
+        }
+
+        .privacy-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 1rem;
+            border-radius: 8px;
+            margin-bottom: 0.5rem;
+            border: 1px solid #f1f5f9;
+        }
+
+        .privacy-label {
+            display: flex;
+            align-items: center;
+            font-weight: 500;
+        }
+
+        .privacy-icon {
+            margin-right: 0.75rem;
+            color: #6b7280;
+        }
+
+        /* Toggle Switch */
+        .toggle {
+            position: relative;
+            width: 44px;
+            height: 24px;
+        }
+
+        .toggle input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-color: #cbd5e1;
+            transition: 0.2s;
+            border-radius: 24px;
+        }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 18px;
+            width: 18px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            transition: 0.2s;
+            border-radius: 50%;
+        }
+
+        input:checked + .slider {
+            background-color: #3b82f6;
+        }
+
+        input:checked + .slider:before {
+            transform: translateX(20px);
+        }
+
+        .section-title {
+            font-weight: 600;
+            margin: 1.5rem 0 1rem 0;
+            color: #374151;
+        }
+
+        .wifi-select, .wifi-input {
+            width: 100%;
+            padding: 0.75rem;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1rem;
+            background: white;
+            color: #1f2937;
+        }
+
+        .wifi-select:focus, .wifi-input:focus {
+            outline: none;
+            border-color: #3b82f6;
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .form-group {
+            text-align: left;
+        }
+
+        .connecting-animation {
+            display: inline-block;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsivo */
+        @media (max-width: 480px) {
+            .app-container {
+                max-width: 100%;
+                box-shadow: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="app-container">
+        <!-- Tela de Login -->
+        <div id="loginScreen" class="login-screen">
+            <div class="logo-icon">📶</div>
+            <h1 class="app-title">WiFi Connect</h1>
+            <p class="app-subtitle">Conecte-se com pessoas na mesma rede WiFi</p>
+            
+            <button class="btn btn-primary" onclick="demoLogin()">
+                🚀 Login Demo
+            </button>
+            <button class="btn btn-secondary" onclick="alert('Cadastro em desenvolvimento!')">
+                ✨ Criar Conta
+            </button>
+        </div>
+
+        <!-- Tela de Seleção WiFi -->
+        <div id="wifiScreen" class="login-screen hidden">
+            <div class="logo-icon">📶</div>
+            <h1 class="app-title">Conectar WiFi</h1>
+            <p class="app-subtitle">Escolha uma rede WiFi para se conectar</p>
+            
+            <div style="width: 100%; max-width: 300px;">
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">
+                        🔍 Redes WiFi Disponíveis
+                    </label>
+                    <select id="wifiSelect" class="wifi-select">
+                        <option value="">Selecione uma rede...</option>
+                        <option value="CoffeeShop_Free_WiFi">☕ CoffeeShop Free WiFi</option>
+                        <option value="Coworking_Space_5G">💼 Coworking Space 5G</option>
+                        <option value="Restaurant_Guest">🍽️ Restaurant Guest</option>
+                        <option value="Hotel_Lobby_WiFi">🏨 Hotel Lobby WiFi</option>
+                        <option value="Conference_Center">🎤 Conference Center</option>
+                        <option value="Shopping_Mall_WiFi">🛍️ Shopping Mall WiFi</option>
+                        <option value="University_Guest">🎓 University Guest</option>
+                        <option value="Cafe_Central">☕ Café Central</option>
+                        <option value="Tech_Hub_Free">💻 Tech Hub Free</option>
+                        <option value="custom">➕ Outra rede...</option>
+                    </select>
+                </div>
+
+                <div id="customWifiDiv" class="form-group hidden" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">
+                        📝 Nome da Rede WiFi
+                    </label>
+                    <input type="text" id="customWifiInput" class="wifi-input" placeholder="Digite o nome da rede WiFi">
+                </div>
+
+                <div class="form-group" style="margin-bottom: 1.5rem;">
+                    <label style="display: block; margin-bottom: 0.5rem; font-weight: 600; color: #374151;">
+                        🔒 Senha (opcional)
+                    </label>
+                    <input type="password" id="wifiPassword" class="wifi-input" placeholder="Senha da rede WiFi">
+                    <small style="color: #6b7280; font-size: 0.8rem; margin-top: 0.25rem; display: block;">
+                        * Apenas para simulação. Não é enviado para lugar nenhum.
+                    </small>
+                </div>
+
+                <button class="btn btn-primary" onclick="showConsentScreen()" id="connectBtn">
+                    🔌 Conectar à Rede
+                </button>
+                <button class="btn btn-secondary" onclick="showLogin()" style="margin-top: 0.5rem;">
+                    ← Voltar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela de Consentimento -->
+        <div id="consentScreen" class="login-screen hidden">
+            <div class="logo-icon">🔔</div>
+            <h1 class="app-title">Receber Novidades</h1>
+            <p class="app-subtitle">Escolha se deseja receber comunicações do local</p>
+            
+            <div style="width: 100%; max-width: 320px;">
+                <div class="consent-info" style="background: #f0f9ff; padding: 1rem; border-radius: 12px; margin-bottom: 1.5rem; text-align: left;">
+                    <div style="font-weight: 600; color: #1e40af; margin-bottom: 0.5rem; display: flex; align-items: center;">
+                        <span id="consentLocationIcon" style="margin-right: 0.5rem;">📍</span>
+                        <span id="consentLocationName">Local Conectado</span>
+                    </div>
+                    <p style="color: #374151; font-size: 0.9rem; line-height: 1.4; margin: 0;">
+                        Este estabelecimento gostaria de enviar novidades, promoções e ofertas especiais diretamente para você.
+                    </p>
+                </div>
+
+                <div class="consent-options" style="margin-bottom: 2rem;">
+                    <div class="consent-option" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s;" onclick="selectConsentOption('promotions', this)">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="font-size: 1.5rem; margin-right: 0.75rem;">🎁</span>
+                                <div>
+                                    <div style="font-weight: 600; color: #1f2937;">Promoções e Ofertas</div>
+                                    <div style="font-size: 0.8rem; color: #6b7280;">Descontos especiais e ofertas exclusivas</div>
+                                </div>
+                            </div>
+                            <div class="consent-checkbox" data-checked="false" style="width: 20px; height: 20px; border: 2px solid #d1d5db; border-radius: 4px; background: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;"></div>
+                        </div>
+                    </div>
+
+                    <div class="consent-option" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; margin-bottom: 0.75rem; cursor: pointer; transition: all 0.2s;" onclick="selectConsentOption('events', this)">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="font-size: 1.5rem; margin-right: 0.75rem;">🎉</span>
+                                <div>
+                                    <div style="font-weight: 600; color: #1f2937;">Eventos e Novidades</div>
+                                    <div style="font-size: 0.8rem; color: #6b7280;">Informações sobre eventos e novidades</div>
+                                </div>
+                            </div>
+                            <div class="consent-checkbox" data-checked="false" style="width: 20px; height: 20px; border: 2px solid #d1d5db; border-radius: 4px; background: white; display: flex; align-items: center; justify-content: center; font-size: 0.8rem;"></div>
+                        </div>
+                    </div>
+
+                    <div class="consent-option" style="background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 1rem; cursor: pointer; transition: all 0.2s;" onclick="selectConsentOption('none', this)">
+                        <div style="display: flex; align-items: center; justify-content: space-between;">
+                            <div style="display: flex; align-items: center;">
+                                <span style="font-size: 1.5rem; margin-right: 0.75rem;">🚫</span>
+                                <div>
+                                    <div style="font-weight: 600; color: #1f2937;">Não receber comunicações</div>
+                                    <div style="font-size: 0.8rem; color: #6b7280;">Apenas usar o WiFi sem notificações</div>
+                                </div>
+                            </div>
+                            <div class="consent-checkbox" data-checked="true" style="width: 20px; height: 20px; border: 2px solid #3b82f6; border-radius: 4px; background: #3b82f6; display: flex; align-items: center; justify-content: center; font-size: 0.8rem; color: white;">✓</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div style="font-size: 0.75rem; color: #6b7280; text-align: center; margin-bottom: 1.5rem; line-height: 1.4;">
+                    🔒 Suas preferências podem ser alteradas a qualquer momento nas configurações. Seus dados estão protegidos conforme nossa política de privacidade.
+                </div>
+
+                <button class="btn btn-primary" onclick="connectToWifi()" id="continueBtn">
+                    ✨ Continuar
+                </button>
+                <button class="btn btn-secondary" onclick="showWifiScreen()" style="margin-top: 0.5rem;">
+                    ← Voltar
+                </button>
+            </div>
+        </div>
+
+        <!-- Tela Home -->
+        <div id="homeScreen" class="home-screen hidden">
+            <div class="header">
+                <div>
+                    <div class="header-title">WiFi Connect</div>
+                    <div class="header-subtitle" id="networkName">🔍 Detectando rede...</div>
+                </div>
+                <div class="header-actions">
+                    <button class="settings-btn" onclick="showSettings()">⚙️</button>
+                    <button class="logout-btn" onclick="logout()">Sair</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="status-container">
+                    <div class="status-dot"></div>
+                    <div class="status-text">✨ Você está visível na rede</div>
+                </div>
+
+                <!-- Usuário Atual -->
+                <div id="currentUserCard" class="user-card current-user">
+                    <div class="user-header">
+                        <img src="https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face" 
+                             class="user-avatar" alt="Sua foto">
+                        <div>
+                            <div class="user-name">Você (Demo)</div>
+                            <div class="user-badge">(Você)</div>
+                        </div>
+                    </div>
+                    <div class="user-about">Testando o app WiFi Presence! 🚀 Interessado em conhecer pessoas e fazer networking.</div>
+                    <div class="user-details">
+                        <div class="user-detail-item">
+                            <span class="detail-icon">❤️</span>
+                            <span>Tecnologia, Networking, Inovação</span>
+                        </div>
+                        <div class="user-detail-item">
+                            <span class="detail-icon">🎯</span>
+                            <span>Curioso, comunicativo e aberto a novas conexões</span>
+                        </div>
+                    </div>
+                    <div class="user-social">
+                        <button class="social-btn instagram-btn" onclick="openInstagram('@demo_user')">
+                            📷 Instagram
+                        </button>
+                    </div>
+                </div>
+
+                <div class="section-title" id="usersSection">👥 Pessoas na rede</div>
+                <div id="usersList"></div>
+            </div>
+        </div>
+
+        <!-- Tela de Configurações -->
+        <div id="settingsScreen" class="settings-screen hidden">
+            <div class="settings-header">
+                <h2 class="settings-title">🔒 Configurações de Privacidade</h2>
+                <button class="close-btn" onclick="showHome()">✕</button>
+            </div>
+            <div class="settings-content">
+                <p style="color: #6b7280; margin-bottom: 1.5rem; text-align: center;">
+                    Escolha quais informações você quer compartilhar
+                </p>
+                
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">👤</span>
+                        Nome
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('nome', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">📷</span>
+                        Foto de Perfil
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('foto', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">📱</span>
+                        WhatsApp
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" onchange="updateSetting('whats', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">📷</span>
+                        Instagram
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('insta', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">👤</span>
+                        Sobre mim
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('sobre', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">❤️</span>
+                        Interesses
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('interesses', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+
+                <div class="privacy-item">
+                    <label class="privacy-label">
+                        <span class="privacy-icon">🎯</span>
+                        Eu sou
+                    </label>
+                    <label class="toggle">
+                        <input type="checkbox" checked onchange="updateSetting('personalidade', this.checked)">
+                        <span class="slider"></span>
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Variáveis globais
+        let currentUser = null;
+        let currentNetwork = null;
+        let consentPreferences = {
+            promotions: false,
+            events: false,
+            none: true
+        };
+        let userSettings = {
+            nome: true,
+            foto: true,
+            whats: false,
+            insta: true,
+            sobre: true,
+            interesses: true,
+            personalidade: true
+        };
+
+        // Informações dos locais
+        const locationInfo = {
+            'CoffeeShop_Free_WiFi': { name: 'CoffeeShop', icon: '☕' },
+            'Coworking_Space_5G': { name: 'Coworking Space', icon: '💼' },
+            'Restaurant_Guest': { name: 'Restaurante', icon: '🍽️' },
+            'Hotel_Lobby_WiFi': { name: 'Hotel Lobby', icon: '🏨' },
+            'Conference_Center': { name: 'Centro de Convenções', icon: '🎤' },
+            'Shopping_Mall_WiFi': { name: 'Shopping Mall', icon: '🛍️' },
+            'University_Guest': { name: 'Universidade', icon: '🎓' },
+            'Cafe_Central': { name: 'Café Central', icon: '☕' },
+            'Tech_Hub_Free': { name: 'Tech Hub', icon: '💻' }
+        };
+
+        // Lista de usuários por rede
+        const networkUsers = {
+            'CoffeeShop_Free_WiFi': [
+                {
+                    name: 'Ana Silva',
+                    photo: 'https://images.unsplash.com/photo-1494790108755-2616b612b789?w=150&h=150&fit=crop&crop=face',
+                    about: 'Designer gráfica apaixonada por café ☕ Adoro conhecer pessoas criativas.',
+                    interests: 'Design, Arte Digital, Fotografia',
+                    personality: 'Criativa, comunicativa e sempre curiosa',
+                    instagram: '@ana.silva'
+                },
+                {
+                    name: 'João Coffee',
+                    photo: 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=150&h=150&fit=crop&crop=face',
+                    about: 'Barista profissional e amante de café especial ☕',
+                    interests: 'Café, Culinária, Música Jazz',
+                    whatsapp: '11999123456',
+                    instagram: '@joao_coffee'
+                }
+            ],
+            'Coworking_Space_5G': [
+                {
+                    name: 'Carlos Santos',
+                    photo: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face',
+                    about: 'Desenvolvedor Full Stack apaixonado por tecnologia 👨‍💻',
+                    interests: 'Tecnologia, Startups, Games, Investimentos',
+                    important: 'Trocar experiências sobre tech e empreendedorismo',
+                    whatsapp: '11988776655',
+                    instagram: '@carlos_dev'
+                },
+                {
+                    name: 'Maria Tech',
+                    photo: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=150&h=150&fit=crop&crop=face',
+                    about: 'Product Manager em startup de fintech 💳',
+                    interests: 'Inovação, Fintech, Agilidade',
+                    personality: 'Estratégica e orientada a resultados',
+                    instagram: '@maria_tech'
+                }
+            ],
+            'Restaurant_Guest': [
+                {
+                    name: 'Chef Roberto',
+                    photo: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?w=150&h=150&fit=crop&crop=face',
+                    about: 'Chef especializado em culinária italiana 🍝',
+                    interests: 'Gastronomia, Vinhos, Viagens',
+                    whatsapp: '11987654321'
+                }
+            ],
+            'Hotel_Lobby_WiFi': [
+                {
+                    name: 'Travel Sarah',
+                    photo: 'https://images.unsplash.com/photo-1489424731084-a5d8b219a5bb?w=150&h=150&fit=crop&crop=face',
+                    about: 'Consultora de turismo e travel blogger ✈️',
+                    interests: 'Viagens, Fotografia, Culturas',
+                    instagram: '@travel_sarah'
+                }
+            ]
+        };
+
+        // Funções de navegação
+        function showScreen(screenId) {
+            document.querySelectorAll('.app-container > div').forEach(div => {
+                div.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
+        }
+
+        function showLogin() {
+            showScreen('loginScreen');
+        }
+
+        function showWifiScreen() {
+            showScreen('wifiScreen');
+        }
+
+        function showConsentScreen() {
+            const select = document.getElementById('wifiSelect');
+            const customInput = document.getElementById('customWifiInput');
+            
+            let selectedNetwork = select.value;
+            if (selectedNetwork === 'custom') {
+                selectedNetwork = customInput.value.trim();
+            }
+            
+            if (!selectedNetwork) {
+                alert('Por favor, selecione ou digite o nome de uma rede WiFi!');
+                return;
+            }
+            
+            // Atualizar informações do local na tela de consentimento
+            const locationData = locationInfo[selectedNetwork] || { name: selectedNetwork, icon: '📍' };
+            document.getElementById('consentLocationIcon').textContent = locationData.icon;
+            document.getElementById('consentLocationName').textContent = locationData.name;
+            
+            showScreen('consentScreen');
+        }
+
+        function selectConsentOption(option, element) {
+            // Reset all options
+            document.querySelectorAll('.consent-option').forEach(opt => {
+                opt.style.borderColor = '#e5e7eb';
+                const checkbox = opt.querySelector('.consent-checkbox');
+                checkbox.style.background = 'white';
+                checkbox.style.borderColor = '#d1d5db';
+                checkbox.style.color = '#6b7280';
+                checkbox.textContent = '';
+                checkbox.setAttribute('data-checked', 'false');
+            });
+            
+            // Set selected option
+            element.style.borderColor = '#3b82f6';
+            const checkbox = element.querySelector('.consent-checkbox');
+            checkbox.style.background = '#3b82f6';
+            checkbox.style.borderColor = '#3b82f6';
+            checkbox.style.color = 'white';
+            checkbox.textContent = '✓';
+            checkbox.setAttribute('data-checked', 'true');
+            
+            // Update preferences
+            consentPreferences = {
+                promotions: option === 'promotions',
+                events: option === 'events',
+                none: option === 'none'
+            };
+        }
+
+        function showHome() {
+            showScreen('homeScreen');
+            updateNetworkDisplay();
+            loadNetworkUsers();
+        }
+
+        function showSettings() {
+            showScreen('settingsScreen');
+        }
+
+        // Função de login demo
+        function demoLogin() {
+            currentUser = {
+                id: 'demo_user',
+                nome: 'Você (Demo)',
+                foto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'
+            };
+            
+            showWifiScreen();
+            
+            // Salvar no localStorage
+            localStorage.setItem('wifiPresenceUser', JSON.stringify(currentUser));
+            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
+        }
+
+        // Funções WiFi
+        function handleWifiSelection() {
+            const select = document.getElementById('wifiSelect');
+            const customDiv = document.getElementById('customWifiDiv');
+            
+            if (select.value === 'custom') {
+                customDiv.classList.remove('hidden');
+            } else {
+                customDiv.classList.add('hidden');
+            }
+        }
+
+        function connectToWifi() {
+            const select = document.getElementById('wifiSelect');
+            const customInput = document.getElementById('customWifiInput');
+            const continueBtn = document.getElementById('continueBtn');
+            
+            let selectedNetwork = select.value;
+            
+            if (selectedNetwork === 'custom') {
+                selectedNetwork = customInput.value.trim();
+            }
+            
+            if (!selectedNetwork) {
+                alert('Por favor, selecione ou digite o nome de uma rede WiFi!');
+                return;
+            }
+            
+            // Simular processo de conexão
+            continueBtn.innerHTML = '<span class="connecting-animation">🔌</span> Conectando...';
+            continueBtn.disabled = true;
+            
+            setTimeout(() => {
+                currentNetwork = selectedNetwork;
+                localStorage.setItem('wifiPresenceNetwork', currentNetwork);
+                localStorage.setItem('wifiPresenceConsent', JSON.stringify(consentPreferences));
+                
+                // Mostrar mensagem baseada no consentimento
+                let message = `✅ Conectado com sucesso à rede: ${currentNetwork}`;
+                if (consentPreferences.promotions || consentPreferences.events) {
+                    const locationData = locationInfo[selectedNetwork] || { name: selectedNetwork };
+                    message += `\n\n🔔 Você receberá comunicações de ${locationData.name}`;
+                } else {
+                    message += `\n\n🔒 Você não receberá comunicações do local`;
+                }
+                
+                alert(message);
+                
+                showHome();
+                
+                // Resetar botão
+                continueBtn.innerHTML = '✨ Continuar';
+                continueBtn.disabled = false;
+            }, 2000);
+        }
+
+        // Atualizar display da rede
+        function updateNetworkDisplay() {
+            const networkElement = document.getElementById('networkName');
+            if (currentNetwork) {
+                networkElement.textContent = `📍 ${currentNetwork}`;
+            } else {
+                networkElement.textContent = '📍 Não conectado';
+            }
+        }
+
+        // Carregar usuários da rede
+        function loadNetworkUsers() {
+            const usersList = document.getElementById('usersList');
+            const usersSection = document.getElementById('usersSection');
+            
+            usersList.innerHTML = '';
+            
+            if (!currentNetwork || !networkUsers[currentNetwork]) {
+                usersSection.textContent = '👥 Nenhuma pessoa encontrada nesta rede';
+                usersList.innerHTML = '<div style="text-align: center; color: #6b7280; padding: 2rem;">Aguarde outras pessoas se conectarem</div>';
+                return;
+            }
+            
+            const users = networkUsers[currentNetwork];
+            usersSection.textContent = `👥 Pessoas na rede (${users.length})`;
+            
+            // Adicionar cards dos usuários
+            users.forEach(user => {
+                const userCard = createUserCard(user);
+                usersList.appendChild(userCard);
+            });
+        }
+
+        // Criar card de usuário
+        function createUserCard(user) {
+            const card = document.createElement('div');
+            card.className = 'user-card';
+            
+            card.innerHTML = `
+                <div class="user-header">
+                    <img src="${user.photo}" class="user-avatar" alt="${user.name}">
+                    <div>
+                        <div class="user-name">${user.name}</div>
+                    </div>
+                </div>
+                ${user.about ? `<div class="user-about">${user.about}</div>` : ''}
+                <div class="user-details">
+                    ${user.interests ? `
+                        <div class="user-detail-item">
+                            <span class="detail-icon">❤️</span>
+                            <span>${user.interests}</span>
+                        </div>
+                    ` : ''}
+                    ${user.important ? `
+                        <div class="user-detail-item">
+                            <span class="detail-icon">⭐</span>
+                            <span>${user.important}</span>
+                        </div>
+                    ` : ''}
+                    ${user.personality ? `
+                        <div class="user-detail-item">
+                            <span class="detail-icon">🎯</span>
+                            <span>${user.personality}</span>
+                        </div>
+                    ` : ''}
+                </div>
+                ${(user.whatsapp || user.instagram) ? `
+                    <div class="user-social">
+                        ${user.whatsapp ? `
+                            <button class="social-btn whatsapp-btn" onclick="openWhatsApp('${user.whatsapp}')">
+                                📱 WhatsApp
+                            </button>
+                        ` : ''}
+                        ${user.instagram ? `
+                            <button class="social-btn instagram-btn" onclick="openInstagram('${user.instagram}')">
+                                📷 Instagram
+                            </button>
+                        ` : ''}
+                    </div>
+                ` : ''}
+            `;
+            
+            return card;
+        }
+
+        // Função de logout
+        function logout() {
+            if (confirm('Tem certeza que deseja sair?')) {
+                currentUser = null;
+                currentNetwork = null;
+                localStorage.removeItem('wifiPresenceUser');
+                localStorage.removeItem('wifiPresenceNetwork');
+                localStorage.removeItem('wifiPresenceConsent');
+                localStorage.removeItem('wifiPresenceSettings');
+                showLogin();
+            }
+        }
+
+        // Atualizar configurações
+        function updateSetting(setting, value) {
+            userSettings[setting] = value;
+            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
+            console.log(`Configuração ${setting} atualizada para: ${value}`);
+        }
+
+        // Abrir WhatsApp
+        function openWhatsApp(number) {
+            const message = `Olá! Vi seu perfil no WiFi Connect 📶`;
+            const url = `https://wa.me/55${number.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Abrir Instagram
+        function openInstagram(username) {
+            const cleanUsername = username.replace('@', '');
+            const url = `https://instagram.com/${cleanUsername}`;
+            window.open(url, '_blank');
+        }
+
+        // Inicialização do app
+        function initApp() {
+            // Verificar se há usuário salvo
+            const savedUser = localStorage.getItem('wifiPresenceUser');
+            const savedNetwork = localStorage.getItem('wifiPresenceNetwork');
+            const savedConsent = localStorage.getItem('wifiPresenceConsent');
+            const savedSettings = localStorage.getItem('wifiPresenceSettings');
+            
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                if (savedNetwork) {
+                    currentNetwork = savedNetwork;
+                    showHome();
+                } else {
+                    showWifiScreen();
+                }
+            } else {
+                showLogin();
+            }
+            
+            if (savedConsent) {
+                consentPreferences = JSON.parse(savedConsent);
+            }
+            
+            if (savedSettings) {
+                userSettings = JSON.parse(savedSettings);
+            }
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            initApp();
+            
+            // Adicionar listener para seleção de WiFi
+            const wifiSelect = document.getElementById('wifiSelect');
+            if (wifiSelect) {
+                wifiSelect.addEventListener('change', handleWifiSelection);
+            }
+        });
+    </script>
+</body>
+</html>
