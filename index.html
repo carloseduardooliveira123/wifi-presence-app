@@ -404,6 +404,10 @@
             50% { opacity: 0.5; }
         }
 
+        .hidden {
+            display: none !important;
+        }
+
         /* Responsivo */
         @media (max-width: 480px) {
             .app-container {
@@ -421,12 +425,35 @@
             <h1 class="app-title">WiFi Connect</h1>
             <p class="app-subtitle">Conecte-se com pessoas na mesma rede WiFi</p>
             
-            <button class="btn btn-primary" onclick="demoLogin()">
+            <button class="btn btn-primary" onclick="handleDemoLogin()">
                 🚀 Login Demo
             </button>
-            <button class="btn btn-secondary" onclick="alert('Cadastro em desenvolvimento!')">
+            <button class="btn btn-secondary" onclick="showRegisterForm()">
                 ✨ Criar Conta
             </button>
+        </div>
+
+        <!-- Tela de Cadastro Simples -->
+        <div id="registerScreen" class="login-screen hidden">
+            <div class="logo-icon">✨</div>
+            <h1 class="app-title">Criar Conta</h1>
+            <p class="app-subtitle">Preencha seus dados básicos</p>
+            
+            <div style="width: 100%; max-width: 300px;">
+                <div class="form-group" style="margin-bottom: 1rem;">
+                    <input type="text" id="registerName" class="wifi-input" placeholder="Seu nome completo" style="margin-bottom: 0.75rem;">
+                    <input type="email" id="registerEmail" class="wifi-input" placeholder="Seu email" style="margin-bottom: 0.75rem;">
+                    <input type="text" id="registerPhone" class="wifi-input" placeholder="WhatsApp (opcional)" style="margin-bottom: 0.75rem;">
+                    <input type="text" id="registerInsta" class="wifi-input" placeholder="Instagram (opcional)">
+                </div>
+
+                <button class="btn btn-primary" onclick="handleRegister()">
+                    ✨ Criar Conta
+                </button>
+                <button class="btn btn-secondary" onclick="showLogin()" style="margin-top: 0.5rem;">
+                    ← Voltar
+                </button>
+            </div>
         </div>
 
         <!-- Tela de Seleção WiFi -->
@@ -557,7 +584,7 @@
             <div class="header">
                 <div>
                     <div class="header-title">WiFi Connect</div>
-                    <div class="header-subtitle" id="networkName">📍 CoffeeShop_Free_WiFi</div>
+                    <div class="header-subtitle" id="networkName">🔍 Detectando rede...</div>
                 </div>
                 <div class="header-actions">
                     <button class="settings-btn" onclick="showSettings()">⚙️</button>
@@ -599,64 +626,8 @@
                     </div>
                 </div>
 
-                <div class="section-title">👥 Pessoas na rede (2)</div>
-
-                <!-- Usuário 1 -->
-                <div class="user-card">
-                    <div class="user-header">
-                        <img src="https://images.unsplash.com/photo-1494790108755-2616b612b789?w=150&h=150&fit=crop&crop=face" 
-                             class="user-avatar" alt="Ana Silva">
-                        <div>
-                            <div class="user-name">Ana Silva</div>
-                        </div>
-                    </div>
-                    <div class="user-about">Designer gráfica apaixonada por café ☕ Adoro conhecer pessoas criativas e trocar ideias sobre arte e design.</div>
-                    <div class="user-details">
-                        <div class="user-detail-item">
-                            <span class="detail-icon">❤️</span>
-                            <span>Design, Arte Digital, Fotografia, Café Especial</span>
-                        </div>
-                        <div class="user-detail-item">
-                            <span class="detail-icon">🎯</span>
-                            <span>Criativa, comunicativa e sempre curiosa</span>
-                        </div>
-                    </div>
-                    <div class="user-social">
-                        <button class="social-btn instagram-btn" onclick="openInstagram('@ana.silva')">
-                            📷 Instagram
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Usuário 2 -->
-                <div class="user-card">
-                    <div class="user-header">
-                        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&h=150&fit=crop&crop=face" 
-                             class="user-avatar" alt="Carlos Santos">
-                        <div>
-                            <div class="user-name">Carlos Santos</div>
-                        </div>
-                    </div>
-                    <div class="user-about">Desenvolvedor Full Stack apaixonado por tecnologia 👨‍💻 Sempre em busca de novos desafios e oportunidades de aprendizado.</div>
-                    <div class="user-details">
-                        <div class="user-detail-item">
-                            <span class="detail-icon">❤️</span>
-                            <span>Tecnologia, Startups, Games, Investimentos</span>
-                        </div>
-                        <div class="user-detail-item">
-                            <span class="detail-icon">⭐</span>
-                            <span>Trocar experiências sobre tech e empreendedorismo</span>
-                        </div>
-                    </div>
-                    <div class="user-social">
-                        <button class="social-btn whatsapp-btn" onclick="openWhatsApp('11988776655')">
-                            📱 WhatsApp
-                        </button>
-                        <button class="social-btn instagram-btn" onclick="openInstagram('@carlos_dev')">
-                            📷 Instagram
-                        </button>
-                    </div>
-                </div>
+                <div class="section-title" id="usersSection">👥 Pessoas na rede</div>
+                <div id="usersList"></div>
             </div>
         </div>
 
@@ -846,35 +817,16 @@
         function showScreen(screenId) {
             document.querySelectorAll('.app-container > div').forEach(div => {
                 div.classList.add('hidden');
-            // Atualizar configurações
-        function updateSetting(setting, value) {
-            userSettings[setting] = value;
-            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
-            console.log(`Configuração ${setting} atualizada para: ${value}`);
-        }
-
-        // Abrir WhatsApp
-        function openWhatsApp(number) {
-            const message = `Olá! Vi seu perfil no WiFi Connect 📶`;
-            const url = `https://wa.me/55${number.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
-            window.open(url, '_blank');
-        }
-
-        // Abrir Instagram
-        function openInstagram(username) {
-            const cleanUsername = username.replace('@', '');
-            const url = `https://instagram.com/${cleanUsername}`;
-            window.open(url, '_blank');
-        }
-
-        .hidden {
-            display: none !important;
-        }
+            });
             document.getElementById(screenId).classList.remove('hidden');
         }
 
         function showLogin() {
             showScreen('loginScreen');
+        }
+
+        function showRegisterForm() {
+            showScreen('registerScreen');
         }
 
         function showWifiScreen() {
@@ -942,19 +894,63 @@
             showScreen('settingsScreen');
         }
 
-        // Função de login demo
-        function demoLogin() {
+        // Função de login demo - CORRIGIDA
+        function handleDemoLogin() {
+            console.log('Login demo iniciado...'); // Debug
+            
             currentUser = {
-                id: 'demo_user',
+                id: 'demo_user_' + Date.now(),
                 nome: 'Você (Demo)',
-                foto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'
+                email: 'demo@wificonnect.app',
+                foto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face',
+                whatsapp: '11987654321',
+                instagram: '@demo_user'
             };
             
-            showWifiScreen();
+            console.log('Usuário criado:', currentUser); // Debug
             
             // Salvar no localStorage
             localStorage.setItem('wifiPresenceUser', JSON.stringify(currentUser));
             localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
+            
+            console.log('Redirecionando para WiFi...'); // Debug
+            showWifiScreen();
+        }
+
+        // Função de cadastro - NOVA
+        function handleRegister() {
+            const name = document.getElementById('registerName').value.trim();
+            const email = document.getElementById('registerEmail').value.trim();
+            const phone = document.getElementById('registerPhone').value.trim();
+            const instagram = document.getElementById('registerInsta').value.trim();
+            
+            if (!name || !email) {
+                alert('⚠️ Nome e email são obrigatórios!');
+                return;
+            }
+            
+            // Validação básica de email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                alert('⚠️ Por favor, digite um email válido!');
+                return;
+            }
+            
+            currentUser = {
+                id: 'user_' + Date.now(),
+                nome: name,
+                email: email,
+                foto: null, // Sem foto inicialmente
+                whatsapp: phone,
+                instagram: instagram
+            };
+            
+            // Salvar no localStorage
+            localStorage.setItem('wifiPresenceUser', JSON.stringify(currentUser));
+            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
+            
+            alert(`✅ Conta criada com sucesso!\nBem-vindo(a), ${name}!`);
+            showWifiScreen();
         }
 
         // Funções WiFi
@@ -1025,32 +1021,19 @@
 
         // Carregar usuários da rede
         function loadNetworkUsers() {
-            const usersList = document.querySelector('#homeScreen .content');
-            const existingUsers = usersList.querySelectorAll('.user-card:not(.current-user)');
-            existingUsers.forEach(card => card.remove());
+            const usersList = document.getElementById('usersList');
+            const usersSection = document.getElementById('usersSection');
             
-            const existingSection = usersList.querySelector('.section-title');
-            if (existingSection) existingSection.remove();
+            usersList.innerHTML = '';
             
             if (!currentNetwork || !networkUsers[currentNetwork]) {
-                // Adicionar mensagem de rede vazia
-                const emptyMessage = document.createElement('div');
-                emptyMessage.className = 'section-title';
-                emptyMessage.style.textAlign = 'center';
-                emptyMessage.style.color = '#6b7280';
-                emptyMessage.style.marginTop = '2rem';
-                emptyMessage.innerHTML = '👥 Nenhuma pessoa encontrada nesta rede<br><small style="font-weight: normal;">Aguarde outras pessoas se conectarem</small>';
-                usersList.appendChild(emptyMessage);
+                usersSection.textContent = '👥 Nenhuma pessoa encontrada nesta rede';
+                usersList.innerHTML = '<div style="text-align: center; color: #6b7280; padding: 2rem;">Aguarde outras pessoas se conectarem</div>';
                 return;
             }
             
             const users = networkUsers[currentNetwork];
-            
-            // Adicionar título da seção
-            const sectionTitle = document.createElement('div');
-            sectionTitle.className = 'section-title';
-            sectionTitle.textContent = `👥 Pessoas na rede (${users.length})`;
-            usersList.appendChild(sectionTitle);
+            usersSection.textContent = `👥 Pessoas na rede (${users.length})`;
             
             // Adicionar cards dos usuários
             users.forEach(user => {
@@ -1111,38 +1094,6 @@
             return card;
         }
 
-        // Funções de navegação
-        function showScreen(screenId) {
-            document.querySelectorAll('.app-container > div').forEach(div => {
-                div.classList.add('hidden');
-            });
-            document.getElementById(screenId).classList.remove('hidden');
-        }
-
-        function showHome() {
-            showScreen('homeScreen');
-        }
-
-        function showSettings() {
-            showScreen('settingsScreen');
-        }
-
-        // Função de login demo
-        function demoLogin() {
-            currentUser = {
-                id: 'demo_user',
-                nome: 'Você (Demo)',
-                foto: 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=150&h=150&fit=crop&crop=face'
-            };
-            
-            // Simular carregamento
-            showHome();
-            
-            // Salvar no localStorage
-            localStorage.setItem('wifiPresenceUser', JSON.stringify(currentUser));
-            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
-        }
-
         // Função de logout
         function logout() {
             if (confirm('Tem certeza que deseja sair?')) {
@@ -1150,32 +1101,82 @@
                 currentNetwork = null;
                 localStorage.removeItem('wifiPresenceUser');
                 localStorage.removeItem('wifiPresenceNetwork');
+                localStorage.removeItem('wifiPresenceConsent');
                 localStorage.removeItem('wifiPresenceSettings');
                 showLogin();
             }
         }
 
-        // Inicialização do app
+        // Atualizar configurações
+        function updateSetting(setting, value) {
+            userSettings[setting] = value;
+            localStorage.setItem('wifiPresenceSettings', JSON.stringify(userSettings));
+            console.log(`Configuração ${setting} atualizada para: ${value}`);
+        }
+
+        // Abrir WhatsApp
+        function openWhatsApp(number) {
+            const message = `Olá! Vi seu perfil no WiFi Connect 📶`;
+            const url = `https://wa.me/55${number.replace(/\D/g, '')}?text=${encodeURIComponent(message)}`;
+            window.open(url, '_blank');
+        }
+
+        // Abrir Instagram
+        function openInstagram(username) {
+            const cleanUsername = username.replace('@', '');
+            const url = `https://instagram.com/${cleanUsername}`;
+            window.open(url, '_blank');
+        }
+
+        // Inicialização do app - MELHORADA
         function initApp() {
+            console.log('Inicializando app...'); // Debug
+            
             // Verificar se há usuário salvo
             const savedUser = localStorage.getItem('wifiPresenceUser');
             const savedNetwork = localStorage.getItem('wifiPresenceNetwork');
+            const savedConsent = localStorage.getItem('wifiPresenceConsent');
             const savedSettings = localStorage.getItem('wifiPresenceSettings');
             
+            console.log('Usuário salvo:', savedUser); // Debug
+            console.log('Rede salva:', savedNetwork); // Debug
+            
             if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                if (savedNetwork) {
-                    currentNetwork = savedNetwork;
-                    showHome();
-                } else {
-                    showWifiScreen();
+                try {
+                    currentUser = JSON.parse(savedUser);
+                    console.log('Usuário carregado:', currentUser); // Debug
+                    
+                    if (savedNetwork) {
+                        currentNetwork = savedNetwork;
+                        console.log('Rede carregada, indo para home'); // Debug
+                        showHome();
+                    } else {
+                        console.log('Sem rede, indo para WiFi'); // Debug
+                        showWifiScreen();
+                    }
+                } catch (error) {
+                    console.error('Erro ao carregar dados salvos:', error);
+                    showLogin();
                 }
             } else {
+                console.log('Sem usuário salvo, mostrando login'); // Debug
                 showLogin();
             }
             
+            if (savedConsent) {
+                try {
+                    consentPreferences = JSON.parse(savedConsent);
+                } catch (error) {
+                    console.error('Erro ao carregar consentimento:', error);
+                }
+            }
+            
             if (savedSettings) {
-                userSettings = JSON.parse(savedSettings);
+                try {
+                    userSettings = JSON.parse(savedSettings);
+                } catch (error) {
+                    console.error('Erro ao carregar configurações:', error);
+                }
             }
         }
 
