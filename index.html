@@ -529,6 +529,303 @@
                 console.log('Atualizando lista de usuários...');
             }
         }, 30000);
+// PATCH PARA ADICIONAR NO HTML EXISTENTE
+// Cole este código antes do </script> final
+
+// Adicionar após os mockUsers
+const mockNetworks = [
+    { id: 1, name: 'Starbucks Paulista', type: 'cafe', users: 42, quality: 'excellent' },
+    { id: 2, name: 'WeWork Faria Lima', type: 'coworking', users: 128, quality: 'good' },
+    { id: 3, name: 'Shopping JK', type: 'mall', users: 234, quality: 'moderate' },
+    { id: 4, name: 'Restaurante Famiglia', type: 'restaurant', users: 15, quality: 'excellent' }
+];
+
+// Estado do onboarding
+let userSetup = {
+    permissions: false,
+    network: null,
+    profile: false
+};
+
+// Modificar a função loginDemo para incluir seleção de rede
+function loginDemo() {
+    showNetworkSelection();
+}
+
+// Nova função para seleção de rede
+function showNetworkSelection() {
+    const loginScreen = document.getElementById('loginScreen');
+    loginScreen.innerHTML = `
+        <div style="padding: 30px;">
+            <h2 style="color: #667eea; margin-bottom: 10px;">📍 Onde você está?</h2>
+            <p style="color: #666; margin-bottom: 30px;">Selecione a rede WiFi do local</p>
+            
+            <div id="networkList">
+                ${mockNetworks.map(net => `
+                    <div onclick="selectNetwork(${net.id})" style="
+                        background: white;
+                        border: 2px solid #e0e0e0;
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 15px;
+                        cursor: pointer;
+                        transition: all 0.3s;
+                    " onmouseover="this.style.borderColor='#667eea'" 
+                       onmouseout="this.style.borderColor='#e0e0e0'">
+                        <div style="display: flex; justify-content: space-between; align-items: center;">
+                            <div>
+                                <div style="font-size: 18px; font-weight: bold; color: #333;">
+                                    ${getNetworkIcon(net.type)} ${net.name}
+                                </div>
+                                <div style="color: #666; margin-top: 5px;">
+                                    ${net.users} pessoas conectadas
+                                </div>
+                            </div>
+                            <div style="text-align: right;">
+                                <div style="color: #667eea;">
+                                    ${getSignalIcon(net.quality)}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `).join('')}
+            </div>
+            
+            <button onclick="manualWiFi()" style="
+                width: 100%;
+                padding: 15px;
+                background: transparent;
+                color: #667eea;
+                border: 2px solid #667eea;
+                border-radius: 12px;
+                font-size: 16px;
+                cursor: pointer;
+                margin-top: 20px;
+            ">Inserir WiFi Manualmente</button>
+        </div>
+    `;
+}
+
+// Helpers para ícones
+function getNetworkIcon(type) {
+    const icons = {
+        cafe: '☕',
+        coworking: '🏢',
+        mall: '🛍️',
+        restaurant: '🍽️'
+    };
+    return icons[type] || '📶';
+}
+
+function getSignalIcon(quality) {
+    const signals = {
+        excellent: '📶 Excelente',
+        good: '📶 Boa',
+        moderate: '📶 Moderada'
+    };
+    return signals[quality] || '📶';
+}
+
+// Selecionar rede
+function selectNetwork(networkId) {
+    const network = mockNetworks.find(n => n.id === networkId);
+    userSetup.network = network;
+    
+    // Mostrar tela de permissões
+    showPermissions(network);
+}
+
+// Tela de permissões
+function showPermissions(network) {
+    const loginScreen = document.getElementById('loginScreen');
+    loginScreen.innerHTML = `
+        <div style="padding: 30px; text-align: center;">
+            <h2 style="color: #667eea; margin-bottom: 30px;">Quase lá! 🚀</h2>
+            
+            <div style="background: #f8f8f8; padding: 20px; border-radius: 12px; margin-bottom: 20px;">
+                <h3 style="color: #333; margin-bottom: 15px;">Conectado em:</h3>
+                <p style="font-size: 20px; color: #667eea; font-weight: bold;">
+                    ${network.name}
+                </p>
+                <p style="color: #666;">${network.users} pessoas próximas</p>
+            </div>
+            
+            <div style="text-align: left; margin: 30px 0;">
+                <h3 style="color: #333; margin-bottom: 20px;">Precisamos de algumas permissões:</h3>
+                
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="perm1" style="margin-right: 10px; width: 20px; height: 20px;">
+                    <span>📍 Localização (para encontrar pessoas próximas)</span>
+                </label>
+                
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="perm2" style="margin-right: 10px; width: 20px; height: 20px;">
+                    <span>🔔 Notificações (avisar sobre matches)</span>
+                </label>
+                
+                <label style="display: flex; align-items: center; margin-bottom: 15px; cursor: pointer;">
+                    <input type="checkbox" id="perm3" style="margin-right: 10px; width: 20px; height: 20px;">
+                    <span>📶 WiFi (detectar sua rede automaticamente)</span>
+                </label>
+            </div>
+            
+            <button onclick="checkPermissions('${network.name}')" style="
+                width: 100%;
+                padding: 16px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+            ">Continuar</button>
+            
+            <p style="color: #999; font-size: 12px; margin-top: 20px;">
+                Você pode alterar as permissões a qualquer momento nas configurações
+            </p>
+        </div>
+    `;
+}
+
+// Verificar permissões
+function checkPermissions(networkName) {
+    const perm1 = document.getElementById('perm1').checked;
+    const perm2 = document.getElementById('perm2').checked;
+    const perm3 = document.getElementById('perm3').checked;
+    
+    if (!perm1 || !perm2 || !perm3) {
+        alert('Por favor, aceite todas as permissões para continuar');
+        return;
+    }
+    
+    userSetup.permissions = true;
+    showQuickProfile(networkName);
+}
+
+// Setup rápido do perfil
+function showQuickProfile(networkName) {
+    const loginScreen = document.getElementById('loginScreen');
+    loginScreen.innerHTML = `
+        <div style="padding: 30px;">
+            <h2 style="color: #667eea; margin-bottom: 10px;">Último passo! ✨</h2>
+            <p style="color: #666; margin-bottom: 30px;">Como você quer aparecer em ${networkName}?</p>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">
+                    Seu nome
+                </label>
+                <input type="text" id="userName" placeholder="João Silva" style="
+                    width: 100%;
+                    padding: 15px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 16px;
+                ">
+            </div>
+            
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">
+                    O que você faz?
+                </label>
+                <input type="text" id="userTitle" placeholder="Product Designer, Desenvolvedor, etc" style="
+                    width: 100%;
+                    padding: 15px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 16px;
+                ">
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <label style="display: block; margin-bottom: 8px; color: #333; font-weight: 500;">
+                    Estou aqui para:
+                </label>
+                <select id="userGoal" style="
+                    width: 100%;
+                    padding: 15px;
+                    border: 2px solid #e0e0e0;
+                    border-radius: 12px;
+                    font-size: 16px;
+                    background: white;
+                ">
+                    <option value="networking">🤝 Networking Profissional</option>
+                    <option value="friends">😊 Fazer Amizades</option>
+                    <option value="dating">❤️ Encontros</option>
+                    <option value="business">💼 Oportunidades de Negócio</option>
+                    <option value="study">📚 Grupos de Estudo</option>
+                </select>
+            </div>
+            
+            <button onclick="completeSetup()" style="
+                width: 100%;
+                padding: 16px;
+                background: linear-gradient(135deg, #667eea, #764ba2);
+                color: white;
+                border: none;
+                border-radius: 12px;
+                font-size: 16px;
+                font-weight: 600;
+                cursor: pointer;
+            ">Começar a Conectar!</button>
+            
+            <button onclick="skipSetup()" style="
+                width: 100%;
+                padding: 16px;
+                background: transparent;
+                color: #999;
+                border: none;
+                font-size: 14px;
+                cursor: pointer;
+                margin-top: 10px;
+            ">Pular por enquanto</button>
+        </div>
+    `;
+}
+
+// Completar setup
+function completeSetup() {
+    const name = document.getElementById('userName').value || 'Usuário Demo';
+    const title = document.getElementById('userTitle').value || 'Profissional';
+    const goal = document.getElementById('userGoal').value;
+    
+    userSetup.profile = { name, title, goal };
+    
+    // Atualizar header do home com info da rede
+    showHomeScreen();
+    updateHomeHeader();
+}
+
+// Atualizar header com rede selecionada
+function updateHomeHeader() {
+    if (userSetup.network) {
+        const wifiInfo = document.querySelector('.wifi-info');
+        if (wifiInfo) {
+            wifiInfo.innerHTML = `
+                <div class="wifi-name">
+                    📶 ${userSetup.network.name}
+                </div>
+                <div class="users-count">${userSetup.network.users} pessoas conectadas</div>
+            `;
+        }
+    }
+}
+
+// Skip setup
+function skipSetup() {
+    showHomeScreen();
+    updateHomeHeader();
+}
+
+// WiFi manual
+function manualWiFi() {
+    const wifiName = prompt('Digite o nome da rede WiFi:');
+    if (wifiName) {
+        userSetup.network = { name: wifiName, users: Math.floor(Math.random() * 50) };
+        showPermissions(userSetup.network);
+    }
+}
     </script>
 </body>
 </html>
+
