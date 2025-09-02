@@ -1,306 +1,1839 @@
-<!DOCTYPE html>
+<div style="padding: 20px;">
+                <button class="btn btn-primary" onclick="showScreen('permissionScreen')" id="continueBtn" style="opacity: 0.5; pointer-events: none;">
+                    Continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- Permission Screen -->
+        <div class="screen" id="permissionScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('wifiScreen')">←</button>
+                <h1>Permissões</h1>
+                <p>Para uma melhor experiência</p>
+            </div>
+            
+            <div class="permission-content">
+                <div class="permission-icon">🔒</div>
+                <h2>Precisamos de algumas permissões</h2>
+                <p style="color: #666; margin-bottom: 30px;">Essas permissões nos ajudam a conectar você com pessoas próximas de forma segura</p>
+                
+                <div class="permission-list">
+                    <div class="permission-item">
+                        <div class="permission-item-icon">📍</div>
+                        <div>
+                            <h3>Localização</h3>
+                            <p>Para detectar usuários na mesma rede WiFi</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">📶</div>
+                        <div>
+                            <h3>Acesso à Rede</h3>
+                            <p>Para verificar conectividade e qualidade</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">🔔</div>
+                        <div>
+                            <h3>Notificações</h3>
+                            <p>Para avisar sobre novos matches e mensagens</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">🏪</div>
+                        <div>
+                            <h3>Notificações do Estabelecimento</h3>
+                            <p>Receber promoções, novidades e ofertas especiais</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('profileScreen')">
+                    Permitir e Continuar
+                </button>
+                <button class="btn btn-secondary" onclick="showScreen('profileScreen')">
+                    Pular por Agora
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Setup Screen -->
+        <div class="screen" id="profileScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('permissionScreen')">←</button>
+                <h1>Seu Perfil</h1>
+                <p>Conte um pouco sobre você</p>
+            </div>
+            
+            <div class="profile-form">
+                <div class="form-group">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="form-input" id="userName" placeholder="Seu nome completo">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Profissão</label>
+                    <input type="text" class="form-input" id="userProfession" placeholder="Ex: Desenvolvedor, Designer, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-input form-textarea" id="userBio" placeholder="Conte um pouco sobre você..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">WhatsApp (opcional)</label>
+                    <input type="tel" class="form-input" id="userWhatsapp" placeholder="(11) 99999-9999">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Instagram (opcional)</label>
+                    <input type="text" class="form-input" id="userInstagram" placeholder="@seuinstagram">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Interesses</label>
+                    <div class="interests-grid">
+                        <div class="interest-tag" onclick="toggleInterest(this)">💻 Tecnologia</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">🎨 Design</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">📈 Negócios</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">🎵 Música</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">✈️ Viagens</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">📚 Educação</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">🏃 Esportes</div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">🍕 Gastronomia</div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="completeSetup()">
+                    Finalizar Perfil
+                </button>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="screen" id="homeScreen">
+            <div class="home-header">
+                <div class="user-info">
+                    <h2 id="welcomeName">Olá, Usuário!</h2>
+                    <p id="currentNetwork">Conectado em: WiFi</p>
+                </div>
+                <button class="settings-btn" onclick="openSettings()">⚙️</button>
+            </div>
+
+            <div class="online-count">
+                <strong id="onlineCount">5 pessoas</strong> online nesta rede
+            </div>
+
+            <!-- Payment by Proximity -->
+            <div class="payment-proximity" id="proximityPayment" style="display: none;">
+                <div class="proximity-header">
+                    <div>
+                        <div style="font-size: 18px; font-weight: 600;">💳 Pagamento Solicitado</div>
+                        <div style="font-size: 14px; opacity: 0.9;" id="merchantName">Café Connect</div>
+                    </div>
+                    <div class="proximity-amount" id="paymentAmount">R$ 18,50</div>
+                </div>
+                
+                <div class="proximity-details">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Mesa:</span>
+                        <span id="tableLocation">Balcão 3</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Cartão:</span>
+                        <span id="selectedCard">•••• 4242</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Itens:</span>
+                        <span id="orderItems">Cappuccino, Croissant</span>
+                    </div>
+                </div>
+
+                <div class="proximity-actions">
+                    <button class="btn-approve" onclick="approvePayment()">
+                        🔒 Pagar com Biometria
+                    </button>
+                    <button class="btn-decline" onclick="declinePayment()">
+                        ✖️ Recusar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Auto Detection -->
+            <div class="auto-detection" id="autoDetection" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <div style="font-size: 16px; font-weight: 600;">🎯 Detectando usuários...</div>
+                        <div style="font-size: 14px; opacity: 0.9;">Mesa 12 - Restaurante Famiglia</div>
+                    </div>
+                    <div style="font-size: 20px;">📡</div>
+                </div>
+                <div class="detected-users">
+                    <div class="detected-user">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">V</div>
+                        <span>Você</span>
+                    </div>
+                    <div class="detected-user">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">AS</div>
+                        <span>Ana Silva</span>
+                    </div>
+                    <div class="detected-user">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">CS</div>
+                        <span>Carlos Santos</span>
+                    </div>
+                    <div class="detected-user">
+                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">MC</div>
+                        <span>Marina Costa</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Enhanced Split Bill -->
+            <div class="split-bill" id="splitBillAdvanced" style="display: none;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>🍽️ Dividir Conta</h3>
+                    <div style="font-size: 20px; font-weight: 700; color: #667eea;">R$ 400,00</div>
+                </div>
+                
+                <div class="division-options">
+                    <div class="division-btn active" onclick="switchDivision('equal')">
+                        ⚖️ Igual
+                    </div>
+                    <div class="division-btn" onclick="switchDivision('custom')">
+                        🎯 Personalizada
+                    </div>
+                </div>
+
+                <!-- Equal Division -->
+                <div id="equalDivision">
+                    <p style="color: #666; margin-bottom: 15px;">4 pessoas × R$ 100,00 cada</p>
+                    
+                    <div class="split-users">
+                        <div class="split-user">
+                            <span>Você</span>
+                            <span class="split-amount">R$ 100,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Ana Silva</span>
+                            <span class="split-amount">R$ 100,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Carlos Santos</span>
+                            <span class="split-amount">R$ 100,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Marina Costa</span>
+                            <span class="split-amount">R$ 100,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom Division -->
+                <div id="customDivision" style="display: none;">
+                    <p style="color: #666; margin-bottom: 15px;">Toque nos itens para atribuir</p>
+                    
+                    <div class="bill-items">
+                        <div class="bill-item" onclick="assignItem(this, 'pizza', 85)">
+                            <div class="item-info">
+                                <div class="item-icon">🍕</div>
+                                <div class="item-details">
+                                    <h4>Pizza Margherita (Grande)</h4>
+                                    <p>Para 2-3 pessoas</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 85,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'salada', 35)">
+                            <div class="item-info">
+                                <div class="item-icon">🥗</div>
+                                <div class="item-details">
+                                    <h4>Salada Caesar</h4>
+                                    <p>Individual</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 35,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'massa', 75)">
+                            <div class="item-info">
+                                <div class="item-icon">🍝</div>
+                                <div class="item-details">
+                                    <h4>Spaghetti Carbonara</h4>
+                                    <p>Individual</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 75,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'risotto', 68)">
+                            <div class="item-info">
+                                <div class="item-icon">🍚</div>
+                                <div class="item-details">
+                                    <h4>Risotto de Camarão</h4>
+                                    <p>Individual</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 68,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'bebidas', 55)">
+                            <div class="item-info">
+                                <div class="item-icon">🍷</div>
+                                <div class="item-details">
+                                    <h4>Bebidas Variadas</h4>
+                                    <p>2 vinhos + 2 refrigerantes</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 55,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'sobremesa', 42)">
+                            <div class="item-info">
+                                <div class="item-icon">🍰</div>
+                                <div class="item-details">
+                                    <h4>Tiramisù + Gelato</h4>
+                                    <p>2 sobremesas</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 42,00</div>
+                        </div>
+
+                        <div class="bill-item" onclick="assignItem(this, 'servico', 40)">
+                            <div class="item-info">
+                                <div class="item-icon">💫</div>
+                                <div class="item-details">
+                                    <h4>Taxa de Serviço</h4>
+                                    <p>10% sobre o total</p>
+                                </div>
+                            </div>
+                            <div class="item-price">R$ 40,00</div>
+                        </div>
+                    </div>
+
+                    <div class="split-users" id="customSplitUsers">
+                        <div class="split-user">
+                            <span>Você</span>
+                            <span class="split-amount" id="yourTotal">R$ 0,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Ana Silva</span>
+                            <span class="split-amount" id="anaTotal">R$ 0,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Carlos Santos</span>
+                            <span class="split-amount" id="carlosTotal">R$ 0,00</span>
+                        </div>
+                        <div class="split-user">
+                            <span>Marina Costa</span>
+                            <span class="split-amount" id="marinaTotal">R$ 0,00</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="cashback-info">
+                    <div style="font-size: 14px; font-weight: 600;">🎁 Cashback Automático</div>
+                    <div style="font-size: 12px; margin-top: 4px;">Ganhe 2% de volta (R$ 8,00) + Pontos de Fidelidade</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="confirmAdvancedSplit()" id="confirmSplitBtn">
+                    Confirmar Minha Parte (R$ 100,00)
+                </button>
+            </div>
+
+            <!-- Consolidated Orders -->
+            <div class="consolidated-orders" id="consolidatedOrders" style="display: none;">
+                <h3 style="margin-bottom: 15px;">☕ Sessão no Starbucks</h3>
+                <p style="color: #666; margin-bottom: 20px;">Pedidos realizados hoje</p>
+                
+                <div class="order-session">
+                    <div class="order-time">09:15 - Entrada</div>
+                    <div class="order-items">
+                        <span class="order-tag">Cappuccino Grande</span>
+                        <span class="order-tag">Croissant Amêndoas</span>
+                    </div>
+                    <div class="order-total">R$ 18,50</div>
+                </div>
+
+                <div class="order-session">
+                    <div class="order-time">11:30 - Segundo Café</div>
+                    <div class="order-items">
+                        <span class="order-tag">Americano</span>
+                        <span class="order-tag">Cookie Chocolate</span>
+                    </div>
+                    <div class="order-total">R$ 15,90</div>
+                </div>
+
+                <div class="order-session">
+                    <div class="order-time">14:15 - Almoço</div>
+                    <div class="order-items">
+                        <span class="order-tag">Wrap de Frango</span>
+                        <span class="order-tag">Suco Natural</span>
+                        <span class="order-tag">Brownie</span>
+                    </div>
+                    <div class="order-total">R$ 35,00</div>
+                </div>
+
+                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; padding: 20px 0; border-top: 2px solid #e9ecef; margin-top: 15px; color: #667eea;">
+                    <span>Total da Sessão:</span>
+                    <span>R$ 69,40</span>
+                </div>
+
+                <div class="cashback-info">
+                    <div style="font-size: 14px; font-weight: 600;">🏆 Permanência Longa Detectada!</div>
+                    <div style="font-size: 12px; margin-top: 4px;">Cashback duplo: 4% (R$ 2,78) + 50 pontos extras</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="payConsolidatedOrder()">
+                    💳 Pagar Tudo de Uma Vez (R$ 69,40)
+                </button>
+            </div>
+
+            <!-- Payment Setup -->
+            <div class="payment-setup" id="paymentSetup" style="display: none;">
+                <h3 style="margin-bottom: 15px;">💳 Configurar Pagamento por Proximidade</h3>
+                <p style="color: #666; margin-bottom: 20px;">Adicione um cartão para pagamentos automáticos via WiFi</p>
+                
+                <div class="card-form">
+                    <input type="text" class="card-input" placeholder="Número do Cartão" id="cardNumber">
+                    <input type="text" class="card-input" placeholder="Nome no Cartão" id="cardName">
+                    <div class="card-row">
+                        <input type="text" class="card-input" placeholder="MM/AA" id="cardExpiry">
+                        <input type="text" class="card-input" placeholder="CVV" id="cardCvv">
+                    </div>
+                    
+                    <div style="margin: 20px 0;">
+                        <label style="display: flex; align-items: center; gap: 10px;">
+                            <input type="checkbox" id="autoApprove">
+                            <span>Aprovar automaticamente até R$ 50,00</span>
+                        </label>
+                    </div>
+
+                    <button class="btn btn-primary" onclick="setupProximityPayment()">
+                        Configurar Pagamento
+                    </button>
+                </div>
+            </div>
+
+            <!-- Payment History -->
+            <div class="proximity-history" id="paymentHistory" style="display: none;">
+                <h3 style="margin-bottom: 15px;">📊 Histórico de Pagamentos</h3>
+                
+                <div class="history-item">
+                    <div class="history-info">
+                        <h4>Restaurante Famiglia</h4>
+                        <p>Hoje, 14:30 - Mesa 7</p>
+                    </div>
+                    <div class="history-amount">R$ 85,00</div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-info">
+                        <h4>Café Connect</h4>
+                        <p>Ontem, 09:15 - Balcão 3</p>
+                    </div>
+                    <div class="history-amount">R$ 18,50</div>
+                </div>
+
+                <div class="history-item">
+                    <div class="history-info">
+                        <h4>Hub TechSpace</h4>
+                        <p>Ontem, 16:45 - Mesa Cowork</p>
+                    </div>
+                    <div class="history-amount">R$ 35,00</div>
+                </div>
+            </div>
+
+            <div class="premium-banner" onclick="showScreen('premiumScreen')">
+                <h3>🔥 Upgrade para Premium</h3>
+                <p>Desbloqueie recursos exclusivos e matches ilimitados</p>
+            </div>
+
+            <div class="users-list" id="usersList">
+                <!-- Users will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Configurações</h2>
+                    <button class="close-btn" onclick="closeSettings()">×</button>
+                </div>
+                
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Visibilidade</h3>
+                            <p>Aparecer para outros usuários</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Notificações</h3>
+                            <p>Receber alertas de novos matches</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Promoções do Estabelecimento</h3>
+                            <p>Receber ofertas e novidades do local</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Auto-connect</h3>
+                            <p>Conectar automaticamente em redes conhecidas</p>
+                        </div>
+                        <div class="toggle" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Modo Privado</h3>
+                            <p>Ocultar informações pessoais</p>
+                        </div>
+                        <div class="toggle" onclick="toggleSetting(this)"></div>
+                    </div>
+                </div>
+
+                <div style="padding: 20px;">
+                    <button class="btn btn-secondary" onclick="logout()">
+                        Sair do App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let currentNetwork = '';
+        let currentNetworkName = '';
+        let userProfile = {};
+        let selectedPlan = '';
+        let selectedPaymentMethod = '';
+        let isPremium = false;
+        let hasPaymentSetup = false;
+        let currentPaymentRequest = null;
+        let divisionMode = 'equal';
+        let customBillAssignments = {
+            'you': { name: 'Você', items: [], total: 0 },
+            'ana': { name: 'Ana Silva', items: [], total: 0 },
+            'carlos': { name: 'Carlos Santos', items: [], total: 0 },
+            'marina': { name: 'Marina Costa', items: [], total: 0 }
+        };
+        let currentAssignee = 'you';
+        let assigneeIndex = 0;
+        
+        // Mock data for different networks
+        const networkUsers = {
+            'CafeConnect_5G': [
+                {
+                    name: 'Ana Silva',
+                    profession: 'UX Designer',
+                    bio: 'Apaixonada por criar experiências digitais incríveis. Sempre em busca de inspiração!',
+                    interests: ['Design', 'Tecnologia', 'Música'],
+                    match: 85,
+                    whatsapp: '+5511999999999',
+                    instagram: '@anasilva.design'
+                },
+                {
+                    name: 'Carlos Santos',
+                    profession: 'Desenvolvedor Full-Stack',
+                    bio: 'Transformando ideias em código. Café e JavaScript são meus combustíveis.',
+                    interests: ['Tecnologia', 'Educação', 'Esportes'],
+                    match: 72,
+                    whatsapp: '+5511888888888',
+                    instagram: '@carlos.dev'
+                }
+            ],
+            'CoWorking_Space': [
+                {
+                    name: 'Rafael Lima',
+                    profession: 'Product Manager',
+                    bio: 'Estratégia e inovação são minha paixão. Conectando pessoas e ideias.',
+                    interests: ['Negócios', 'Tecnologia', 'Educação'],
+                    match: 92,
+                    whatsapp: '+5511666666666',
+                    instagram: '@rafael.pm'
+                },
+                {
+                    name: 'Juliana Rocha',
+                    profession: 'Data Scientist',
+                    bio: 'Encontrando insights valiosos nos dados. Machine Learning é meu hobby.',
+                    interests: ['Tecnologia', 'Educação', 'Música'],
+                    match: 78,
+                    whatsapp: '+5511555555555',
+                    instagram: '@ju.data'
+                }
+            ]
+        };
+
+        // Utility Functions
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        function selectWifi(networkId, networkName) {
+            document.querySelectorAll('.wifi-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            event.target.closest('.wifi-item').classList.add('selected');
+            currentNetwork = networkId;
+            currentNetworkName = networkName;
+            
+            const continueBtn = document.getElementById('continueBtn');
+            continueBtn.style.opacity = '1';
+            continueBtn.style.pointerEvents = 'auto';
+        }
+
+        function demoMode() {
+            currentNetwork = 'CoWorking_Space';
+            currentNetworkName = 'CoWorking Space Premium';
+            hasPaymentSetup = true;
+            userProfile = {
+                name: 'Usuário Demo',
+                profession: 'Profissional',
+                bio: 'Perfil de demonstração do app',
+                interests: ['Tecnologia', 'Design']
+            };
+            showScreen('homeScreen');
+            loadUsers();
+        }
+
+        function toggleInterest(element) {
+            element.classList.toggle('selected');
+        }
+
+        function toggleSetting(element) {
+            element.classList.toggle('active');
+        }
+
+        function completeSetup() {
+            userProfile = {
+                name: document.getElementById('userName').value || 'Usuário',
+                profession: document.getElementById('userProfession').value || 'Profissional',
+                bio: document.getElementById('userBio').value || 'Olá! Estou usando o WiFi Presence.',
+                whatsapp: document.getElementById('userWhatsapp').value || '',
+                instagram: document.getElementById('userInstagram').value || '',
+                interests: Array.from(document.querySelectorAll('.interest-tag.selected')).map(tag => tag.textContent.trim())
+            };
+
+            localStorage.setItem('wifiPresenceProfile', JSON.stringify(userProfile));
+            localStorage.setItem('wifiPresenceNetwork', currentNetwork);
+            localStorage.setItem('wifiPresenceNetworkName', currentNetworkName);
+            
+            showScreen('homeScreen');
+            loadUsers();
+        }
+
+        function loadUsers() {
+            const usersList = document.getElementById('usersList');
+            const welcomeName = document.getElementById('welcomeName');
+            const currentNetworkEl = document.getElementById('currentNetwork');
+            const onlineCount = document.getElementById('onlineCount');
+            
+            // Update header
+            welcomeName.textContent = `Olá, ${userProfile.name}!${isPremium ? ' 👑' : ''}`;
+            currentNetworkEl.textContent = `Conectado em: ${currentNetworkName}`;
+            
+            // Hide premium banner if user is premium
+            const premiumBanner = document.querySelector('.premium-banner');
+            if (isPremium && premiumBanner) {
+                premiumBanner.style.display = 'none';
+            }
+            
+            // Get users for current network
+            const users = networkUsers[currentNetwork] || [];
+            onlineCount.textContent = `${users.length} pessoas`;
+            
+            // Show proximity payment features based on network
+            showProximityFeatures();
+            
+            // Clear users list
+            usersList.innerHTML = '';
+            
+            // Populate users
+            users.forEach(user => {
+                const userCard = createUserCard(user);
+                usersList.appendChild(userCard);
+            });
+        }
+
+        function showProximityFeatures() {
+            const proximityPayment = document.getElementById('proximityPayment');
+            const splitBillAdvanced = document.getElementById('splitBillAdvanced');
+            const autoDetection = document.getElementById('autoDetection');
+            const paymentSetup = document.getElementById('paymentSetup');
+            const paymentHistory = document.getElementById('paymentHistory');
+            const consolidatedOrders = document.getElementById('consolidatedOrders');
+
+            // Hide all proximity features first
+            proximityPayment.style.display = 'none';
+            splitBillAdvanced.style.display = 'none';
+            autoDetection.style.display = 'none';
+            paymentSetup.style.display = 'none';
+            paymentHistory.style.display = 'none';
+            consolidatedOrders.style.display = 'none';
+
+            // Show features based on network and setup status
+            if (currentNetwork === 'CafeConnect_5G') {
+                if (!hasPaymentSetup) {
+                    paymentSetup.style.display = 'block';
+                } else {
+                    consolidatedOrders.style.display = 'block';
+                    // Simulate consolidated payment after 4 seconds
+                    setTimeout(simulateConsolidatedPayment, 4000);
+                }
+            } else if (currentNetwork === 'CoWorking_Space' && hasPaymentSetup) {
+                // Show auto detection first, then advanced split
+                autoDetection.style.display = 'block';
+                setTimeout(() => {
+                    autoDetection.style.display = 'none';
+                    splitBillAdvanced.style.display = 'block';
+                }, 3000);
+            } else if (currentNetwork === 'TechHub_Guest' && hasPaymentSetup) {
+                paymentHistory.style.display = 'block';
+            }
+        }
+
+        function simulateConsolidatedPayment() {
+            const consolidatedOrders = document.getElementById('consolidatedOrders');
+            if (consolidatedOrders.style.display === 'block') {
+                consolidatedOrders.style.animation = 'pulse 1s ease-in-out 3';
+                
+                if (navigator.vibrate) {
+                    navigator.vibrate([100, 50, 100]);
+                }
+            }
+        }
+
+        function createUserCard(user) {
+            const card = document.createElement('div');
+            card.className = 'user-card';
+            
+            const avatar = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            card.innerHTML = `
+                <div class="user-header">
+                    <div class="user-avatar">${avatar}</div>
+                    <div class="user-details">
+                        <h3>${user.name}</h3>
+                        <p>${user.profession}</p>
+                    </div>
+                    <div class="match-percentage">${user.match}% match</div>
+                </div>
+                
+                <div class="user-bio">${user.bio}</div>
+                
+                <div class="user-interests">
+                    ${user.interests.map(interest => `<span class="interest-badge">${interest}</span>`).join('')}
+                </div>
+                
+                <div class="social-links">
+                    ${user.whatsapp ? `
+                        <button class="social-btn whatsapp-btn" onclick="openWhatsApp('${user.whatsapp}')">
+                            <span style="font-size: 16px;">📱</span> WhatsApp
+                        </button>
+                    ` : ''}
+                    ${user.instagram ? `
+                        <button class="social-btn instagram-btn" onclick="openInstagram('${user.instagram}')">
+                            <span style="font-size: 16px;">📷</span> Instagram
+                        </button>
+                    ` : ''}
+                </div>
+            `;
+            
+            return card;
+        }
+
+        function switchDivision(mode) {
+            const equalBtn = document.querySelector('.division-btn:first-child');
+            const customBtn = document.querySelector('.division-btn:last-child');
+            const equalDiv = document.getElementById('equalDivision');
+            const customDiv = document.getElementById('customDivision');
+            const confirmBtn = document.getElementById('confirmSplitBtn');
+
+            divisionMode = mode;
+
+            if (mode === 'equal') {
+                equalBtn.classList.add('active');
+                customBtn.classList.remove('active');
+                equalDiv.style.display = 'block';
+                customDiv.style.display = 'none';
+                confirmBtn.textContent = 'Confirmar Minha Parte (R$ 100,00)';
+            } else {
+                customBtn.classList.add('active');
+                equalBtn.classList.remove('active');
+                customDiv.style.display = 'block';
+                equalDiv.style.display = 'none';
+                updateCustomTotals();
+            }
+        }
+
+        function assignItem(element, itemName, price) {
+            const assignees = ['you', 'ana', 'carlos', 'marina'];
+            const assigneeNames = ['Você', 'Ana', 'Carlos', 'Marina'];
+            
+            const assignee = assignees[assigneeIndex % assignees.length];
+            const assigneeName = assigneeNames[assigneeIndex % assigneeNames.length];
+            
+            element.classList.add('assigned');
+            
+            const existingTag = element.querySelector('.item-assignee');
+            if (existingTag) {
+                existingTag.remove();
+                const previousAssignee = existingTag.dataset.assignee;
+                if (customBillAssignments[previousAssignee]) {
+                    customBillAssignments[previousAssignee].total -= price;
+                    customBillAssignments[previousAssignee].items = customBillAssignments[previousAssignee].items.filter(item => item.name !== itemName);
+                }
+            }
+            
+            const assigneeTag = document.createElement('span');
+            assigneeTag.className = 'item-assignee';
+            assigneeTag.textContent = assigneeName;
+            assigneeTag.dataset.assignee = assignee;
+            element.querySelector('.item-price').appendChild(assigneeTag);
+            
+            customBillAssignments[assignee].items.push({ name: itemName, price: price });
+            customBillAssignments[assignee].total += price;
+            
+            assigneeIndex++;
+            updateCustomTotals();
+        }
+
+        function updateCustomTotals() {
+            document.getElementById('yourTotal').textContent = `R$ ${customBillAssignments.you.total.toFixed(2)}`;
+            document.getElementById('anaTotal').textContent = `R$ ${customBillAssignments.ana.total.toFixed(2)}`;
+            document.getElementById('carlosTotal').textContent = `R$ ${customBillAssignments.carlos.total.toFixed(2)}`;
+            document.getElementById('marinaTotal').textContent = `R$ ${customBillAssignments.marina.total.toFixed(2)}`;
+            
+            const confirmBtn = document.getElementById('confirmSplitBtn');
+            confirmBtn.textContent = `Confirmar Minha Parte (R$ ${customBillAssignments.you.total.toFixed(2)})`;
+        }
+
+        function confirmAdvancedSplit() {
+            const confirmBtn = document.getElementById('confirmSplitBtn');
+            const yourTotal = customBillAssignments.you.total;
+            
+            confirmBtn.textContent = 'Processando...';
+            confirmBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                if (divisionMode === 'equal') {
+                    alert('✅ Conta dividida igualmente!\n\nR$ 100,00 debitado do seu cartão.\nCashback: R$ 2,00\nTodos os participantes foram notificados.');
+                } else {
+                    const yourItems = customBillAssignments.you.items.map(item => item.name).join(', ');
+                    alert(`✅ Sua parte foi paga!\n\nItens: ${yourItems}\nValor: R$ ${yourTotal.toFixed(2)}\nCashback: R$ ${(yourTotal * 0.02).toFixed(2)}\n\nOutros participantes foram notificados de suas partes.`);
+                }
+                
+                confirmBtn.textContent = '✅ Pago - Aguardando outros';
+                confirmBtn.style.background = '#00b894';
+                confirmBtn.disabled = true;
+            }, 2500);
+        }
+
+        function payConsolidatedOrder() {
+            const payBtn = event.target;
+            payBtn.textContent = 'Processando Pagamento...';
+            payBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                alert('🎉 Pagamento Consolidado Realizado!\n\n' +
+                      '☕ Total da Sessão: R$ 69,40\n' +
+                      '🏆 Cashback Duplo: R$ 2,78 (4%)\n' +
+                      '⭐ +50 pontos de fidelidade\n' +
+                      '📧 Comprovante enviado por email\n\n' +
+                      'Obrigado pela permanência longa!');
+                
+                document.getElementById('consolidatedOrders').style.display = 'none';
+                document.getElementById('paymentHistory').style.display = 'block';
+                
+                payBtn.textContent = '💳 Pagar Tudo de Uma Vez (R$ 69,40)';
+                payBtn.style.opacity = '1';
+            }, 3000);
+        }
+
+        function setupProximityPayment() {
+            const cardNumber = document.getElementById('cardNumber').value;
+            const cardName = document.getElementById('cardName').value;
+            
+            if (!cardNumber || !cardName) {
+                alert('Por favor, preencha todos os campos do cartão');
+                return;
+            }
+            
+            const setupBtn = event.target;
+            setupBtn.textContent = 'Configurando...';
+            setupBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                hasPaymentSetup = true;
+                localStorage.setItem('wifiPresencePaymentSetup', 'true');
+                
+                alert('✅ Pagamento por Proximidade configurado com sucesso!\n\nAgora você pode pagar automaticamente em estabelecimentos parceiros.');
+                
+                setupBtn.textContent = 'Configurar Pagamento';
+                setupBtn.style.opacity = '1';
+                
+                loadUsers();
+            }, 2000);
+        }
+
+        function approvePayment() {
+            const proximityPayment = document.getElementById('proximityPayment');
+            const approveBtn = document.querySelector('.btn-approve');
+            
+            approveBtn.textContent = '🔒 Autenticando...';
+            approveBtn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                alert('✅ Pagamento aprovado!\n\n' + 
+                      'Café Connect: R$ 18,50\n' +
+                      'Comprovante enviado por email.');
+                
+                proximityPayment.style.display = 'none';
+                proximityPayment.classList.remove('requesting');
+                
+                const paymentHistory = document.getElementById('paymentHistory');
+                paymentHistory.style.display = 'block';
+                
+                approveBtn.textContent = '🔒 Pagar com Biometria';
+                approveBtn.style.opacity = '1';
+            }, 2000);
+        }
+
+        function declinePayment() {
+            const proximityPayment = document.getElementById('proximityPayment');
+            proximityPayment.style.display = 'none';
+            proximityPayment.classList.remove('requesting');
+            
+            const paymentHistory = document.getElementById('paymentHistory');
+            paymentHistory.style.display = 'block';
+        }
+
+        function openWhatsApp(phone) {
+            const message = encodeURIComponent('Olá! Vi seu perfil no WiFi Presence. Gostaria de conversar!');
+            window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${message}`, '_blank');
+        }
+
+        function openInstagram(username) {
+            const cleanUsername = username.replace('@', '');
+            window.open(`https://instagram.com/${cleanUsername}`, '_blank');
+        }
+
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function logout() {
+            localStorage.clear();
+            currentNetwork = '';
+            currentNetworkName = '';
+            userProfile = {};
+            hasPaymentSetup = false;
+            isPremium = false;
+            
+            customBillAssignments = {
+                'you': { name: 'Você', items: [], total: 0 },
+                'ana': { name: 'Ana Silva', items: [], total: 0 },
+                'carlos': { name: 'Carlos Santos', items: [], total: 0 },
+                'marina': { name: 'Marina Costa', items: [], total: 0 }
+            };
+            
+            showScreen('loginScreen');
+            closeSettings();
+        }
+
+        // Load saved data on page load
+        window.addEventListener('load', function() {
+            const savedProfile = localStorage.getItem('wifiPresenceProfile');
+            const savedNetwork = localStorage.getItem('wifiPresenceNetwork');
+            const savedNetworkName = localStorage.getItem('wifiPresenceNetworkName');
+            const savedPremium = localStorage.getItem('wifiPresencePremium');
+            const savedPaymentSetup = localStorage.getItem('wifiPresencePaymentSetup');
+            
+            if (savedPremium) {
+                isPremium = true;
+            }
+            
+            if (savedPaymentSetup) {
+                hasPaymentSetup = true;
+            }
+            
+            if (savedProfile && savedNetwork) {
+                userProfile = JSON.parse(savedProfile);
+                currentNetwork = savedNetwork;
+                currentNetworkName = savedNetworkName;
+                showScreen('homeScreen');
+                loadUsers();
+            }
+        });
+    </script>
+</body>
+</html><!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WiFi Presence - App Completo</title>
+    <title>WiFi Presence - Conecte-se</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
-        
-        .phone-container {
+
+        .app-container {
+            width: 100%;
             max-width: 390px;
-            margin: 20px auto;
+            min-height: 100vh;
             background: white;
-            border-radius: 30px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            border-radius: 20px;
             overflow: hidden;
-            min-height: 844px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            position: relative;
         }
-        
-        .screen { display: none; min-height: 844px; }
-        .screen.active { display: block; }
-        
+
+        .screen {
+            display: none;
+            width: 100%;
+            min-height: 100vh;
+            position: relative;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: relative;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+
+        .header p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .back-btn {
+            position: absolute;
+            left: 20px;
+            top: 20px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
         /* Login Screen */
-        .login-screen {
-            padding: 60px 30px;
+        .login-content {
+            padding: 40px 30px;
             text-align: center;
         }
-        
+
         .logo {
-            font-size: 48px;
-            margin-bottom: 20px;
-        }
-        
-        .app-title {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 20px;
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             font-size: 32px;
-            font-weight: bold;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
+            color: white;
+        }
+
+        .login-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #333;
             margin-bottom: 10px;
         }
-        
-        .tagline {
+
+        .login-subtitle {
+            font-size: 16px;
             color: #666;
             margin-bottom: 40px;
+            line-height: 1.5;
         }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        .input-label {
-            display: block;
-            margin-bottom: 8px;
-            color: #333;
-            font-weight: 500;
-        }
-        
-        .input {
-            width: 100%;
-            padding: 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: all 0.3s;
-        }
-        
-        .input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-        
-        .btn-primary {
+
+        .btn {
             width: 100%;
             padding: 16px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
             border: none;
             border-radius: 12px;
             font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
+            margin-bottom: 15px;
         }
-        
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+
         .btn-primary:hover {
             transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
         }
-        
-        .demo-btn {
-            margin-top: 20px;
-            background: transparent;
-            color: #667eea;
-            border: 2px solid #667eea;
+
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid #e9ecef;
         }
-        
-        /* Network Selection */
-        .network-card {
+
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+
+        /* WiFi Selection */
+        .wifi-list {
+            padding: 20px;
+        }
+
+        .wifi-item {
             background: white;
-            border: 2px solid #e0e0e0;
+            border: 2px solid #e9ecef;
             border-radius: 12px;
-            padding: 20px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .network-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-        
-        /* Home Screen */
-        .header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 20px;
-            color: white;
-        }
-        
-        .header-top {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        
-        .header-actions {
-            display: flex;
-            gap: 15px;
-        }
-        
-        .header-btn {
-            background: rgba(255,255,255,0.2);
-            border: none;
-            padding: 8px 12px;
-            border-radius: 8px;
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .header-btn:hover {
-            background: rgba(255,255,255,0.3);
-            transform: scale(1.1);
-        }
-        
-        .wifi-info {
-            background: rgba(255,255,255,0.2);
-            padding: 15px;
-            border-radius: 12px;
-            backdrop-filter: blur(10px);
-        }
-        
-        .wifi-name {
-            font-size: 18px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .users-count {
-            color: rgba(255,255,255,0.9);
-            margin-top: 5px;
-        }
-        
-        .user-list {
-            padding: 20px;
-        }
-        
-        .section-title {
-            font-size: 20px;
-            font-weight: bold;
-            margin-bottom: 20px;
-            color: #333;
-        }
-        
-        .user-card {
-            background: white;
-            border-radius: 16px;
             padding: 16px;
-            margin-bottom: 16px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.08);
-            border: 2px solid transparent;
-            transition: all 0.3s;
+            margin-bottom: 12px;
             cursor: pointer;
-        }
-        
-        .user-card:hover {
-            border-color: #667eea;
-            transform: translateY(-2px);
-        }
-        
-        .user-header {
+            transition: all 0.3s ease;
             display: flex;
             align-items: center;
-            margin-bottom: 12px;
+            justify-content: space-between;
         }
-        
-        .user-avatar {
-            width: 60px;
-            height: 60px;
+
+        .wifi-item:hover {
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .wifi-item.selected {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.05);
+        }
+
+        .wifi-info {
+            display: flex;
+            align-items: center;
+        }
+
+        .wifi-icon {
+            font-size: 20px;
+            margin-right: 12px;
+        }
+
+        .wifi-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .wifi-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .wifi-signal {
+            font-size: 18px;
+            color: #28a745;
+        }
+
+        /* Permission Screen */
+        .permission-content {
+            padding: 30px;
+            text-align: center;
+        }
+
+        .permission-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+            margin: 0 auto 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 40px;
+            color: white;
+        }
+
+        .permission-list {
+            text-align: left;
+            margin: 30px 0;
+        }
+
+        .permission-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding: 16px;
+            background: #f8f9fa;
+            border-radius: 12px;
+        }
+
+        .permission-item-icon {
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
             color: white;
-            font-weight: bold;
-            font-size: 20px;
             margin-right: 15px;
-            position: relative;
-        }
-        
-        .status-dot {
-            position: absolute;
-            bottom: 0;
-            right: 0;
-            width: 16px;
-            height: 16px;
-            border-radius: 50%;
-            border: 3px solid white;
-        }
-        
-        .status-dot.available { background: #4CAF50; }
-        .status-dot.busy { background: #FF9800; }
-        
-        .user-info {
-            flex: 1;
-        }
-        
-        .user-name {
             font-size: 18px;
-            font-weight: bold;
-            color: #333;
         }
-        
-        .user-title {
-            color: #666;
+
+        /* Profile Setup */
+        .profile-form {
+            padding: 30px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
             font-size: 14px;
         }
-        
-        .user-bio {
-            color: #555;
-            line-height: 1.5;
-            margin-bottom: 12px;
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
         }
-        
-        .interests {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 12px;
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
         }
-        
+
+        .form-textarea {
+            height: 80px;
+            resize: vertical;
+        }
+
+        .interests-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
         .interest-tag {
-            background: #f0f0f0;
-            padding: 6px 12px;
-            border-radius: 16px;
-            font-size: 12px;
-            color: #555;
+            padding: 8px 12px;
+            background: #f8f9fa;
+            border: 2px solid #e9ecef;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            text-align: center;
+            transition: all 0.3s ease;
         }
-        
-        .user-actions {
+
+        .interest-tag.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        /* Home Screen */
+        .home-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .user-info h2 {
+            font-size: 20px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .user-info p {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+
+        .settings-btn {
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .online-count {
+            background: rgba(255,255,255,0.1);
+            padding: 15px 20px;
+            margin: 0 20px 20px;
+            border-radius: 12px;
+            color: white;
+            text-align: center;
+        }
+
+        /* Payment by Proximity */
+        .payment-proximity {
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            color: white;
+            padding: 20px;
+            margin: 0 20px 20px;
+            border-radius: 16px;
+            position: relative;
+            animation: pulse 2s infinite;
+        }
+
+        .payment-proximity.requesting {
+            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
+            animation: shake 0.5s ease-in-out;
+        }
+
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
+            50% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-5px); }
+            75% { transform: translateX(5px); }
+        }
+
+        .proximity-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .proximity-amount {
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .proximity-details {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .proximity-actions {
             display: flex;
             gap: 10px;
-            padding-top: 12px;
-            border-top: 1px solid #f0f0f0;
+            margin-top: 15px;
         }
-        
-        .social-btn {
-            padding: 8px 12px;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            font-size: 20px;
-            background: #f0f0f0;
-            transition: all 0.2s;
-        }
-        
-        .social-btn:hover {
-            transform: scale(1.1);
-        }
-        
-        .connect-btn {
-            margin-left: auto;
-            padding: 8px 20px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
+
+        .btn-approve {
+            flex: 1;
+            background: #00b894;
             color: white;
             border: none;
-            border-radius: 20px;
+            padding: 12px;
+            border-radius: 10px;
             font-weight: 600;
             cursor: pointer;
         }
-        
-        /* Payment Modal */
+
+        .btn-decline {
+            flex: 1;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 12px;
+            border-radius: 10px;
+            font-weight: 600;
+            cursor: pointer;
+        }
+
+        .users-list {
+            padding: 0 20px 20px;
+        }
+
+        .user-card {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .user-card:hover {
+            transform: translateY(-2px);
+        }
+
+        .user-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .user-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            margin-right: 15px;
+        }
+
+        .user-details h3 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .user-details p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .match-percentage {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            margin-left: auto;
+        }
+
+        .user-bio {
+            font-size: 14px;
+            color: #666;
+            line-height: 1.4;
+            margin-bottom: 15px;
+        }
+
+        .user-interests {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .interest-badge {
+            background: #f8f9fa;
+            color: #667eea;
+            padding: 4px 8px;
+            border-radius: 12px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .social-links {
+            display: flex;
+            gap: 10px;
+        }
+
+        .social-btn {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 10px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .whatsapp-btn {
+            background: #25d366;
+            color: white;
+        }
+
+        .whatsapp-btn:hover {
+            background: #22c25d;
+            transform: translateY(-1px);
+        }
+
+        .instagram-btn {
+            background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
+            color: white;
+        }
+
+        .instagram-btn:hover {
+            transform: translateY(-1px);
+        }
+
+        /* Advanced Split Bill */
+        .auto-detection {
+            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
+            color: white;
+            padding: 15px 20px;
+            margin: 0 20px 15px;
+            border-radius: 12px;
+            animation: pulse 2s infinite;
+        }
+
+        .detected-users {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+            overflow-x: auto;
+            padding: 5px 0;
+        }
+
+        .detected-user {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-width: 60px;
+            padding: 10px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+
+        .split-bill {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .split-users {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .split-user {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+
+        .split-amount {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .division-options {
+            display: flex;
+            gap: 10px;
+            margin: 15px 0;
+        }
+
+        .division-btn {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #e9ecef;
+            background: white;
+            border-radius: 10px;
+            cursor: pointer;
+            text-align: center;
+            font-size: 14px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+
+        .division-btn.active {
+            border-color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            color: #667eea;
+        }
+
+        .bill-items {
+            background: white;
+            border-radius: 12px;
+            margin: 15px 0;
+            overflow: hidden;
+        }
+
+        .bill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 15px;
+            border-bottom: 1px solid #e9ecef;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        .bill-item:last-child {
+            border-bottom: none;
+        }
+
+        .bill-item:hover {
+            background: #f8f9fa;
+        }
+
+        .bill-item.assigned {
+            background: rgba(102, 126, 234, 0.1);
+            border-left: 4px solid #667eea;
+        }
+
+        .item-info {
+            display: flex;
+            align-items: center;
+            flex: 1;
+        }
+
+        .item-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: 6px;
+            background: #f8f9fa;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 12px;
+            font-size: 16px;
+        }
+
+        .item-details h4 {
+            font-size: 14px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 2px;
+        }
+
+        .item-details p {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .item-price {
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        .item-assignee {
+            font-size: 11px;
+            background: #667eea;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 10px;
+            margin-left: 8px;
+        }
+
+        .cashback-info {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            color: #333;
+            padding: 12px 15px;
+            border-radius: 10px;
+            margin: 15px 0;
+            text-align: center;
+        }
+
+        .consolidated-orders {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .order-session {
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            margin: 10px 0;
+            position: relative;
+        }
+
+        .order-time {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 8px;
+        }
+
+        .order-items {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .order-tag {
+            background: white;
+            padding: 4px 10px;
+            border-radius: 15px;
+            font-size: 12px;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+
+        .order-total {
+            font-weight: 600;
+            color: #667eea;
+            text-align: right;
+        }
+
+        .payment-setup {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 20px 20px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .card-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .card-input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            font-size: 16px;
+        }
+
+        .card-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .proximity-history {
+            background: white;
+            border-radius: 16px;
+            padding: 20px;
+            margin: 0 20px 15px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .history-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+
+        .history-info h4 {
+            font-size: 16px;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 4px;
+        }
+
+        .history-info p {
+            font-size: 14px;
+            color: #666;
+        }
+
+        .history-amount {
+            font-size: 16px;
+            font-weight: 600;
+            color: #667eea;
+        }
+
+        /* Premium Features */
+        .premium-banner {
+            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
+            color: #333;
+            padding: 15px 20px;
+            margin: 0 20px 20px;
+            border-radius: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+
+        .premium-banner:hover {
+            transform: translateY(-2px);
+        }
+
+        .premium-banner h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .premium-banner p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        /* Settings Modal */
         .modal {
             display: none;
             position: fixed;
@@ -310,855 +1843,207 @@
             height: 100%;
             background: rgba(0,0,0,0.5);
             z-index: 1000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
         }
-        
+
         .modal.active {
             display: flex;
-            justify-content: center;
-            align-items: flex-end;
         }
-        
+
         .modal-content {
             background: white;
+            border-radius: 20px;
             width: 100%;
-            max-width: 390px;
-            border-radius: 30px 30px 0 0;
+            max-width: 350px;
             max-height: 80vh;
             overflow-y: auto;
-            animation: slideUp 0.3s ease;
         }
-        
-        @keyframes slideUp {
-            from { transform: translateY(100%); }
-            to { transform: translateY(0); }
-        }
-        
+
         .modal-header {
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
+            padding: 20px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        
+
         .modal-title {
-            font-size: 20px;
-            font-weight: bold;
+            font-size: 18px;
+            font-weight: 600;
         }
-        
-        .close-modal {
+
+        .close-btn {
             background: none;
             border: none;
             color: white;
             font-size: 24px;
             cursor: pointer;
+            padding: 0;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-        
-        .payment-content {
+
+        .settings-list {
             padding: 20px;
         }
-        
-        .establishment-info {
-            background: #f8f8f8;
-            padding: 15px;
-            border-radius: 12px;
-            margin-bottom: 20px;
-            text-align: center;
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #e9ecef;
         }
-        
-        .establishment-name {
-            font-size: 18px;
-            font-weight: bold;
+
+        .setting-item:last-child {
+            border-bottom: none;
+        }
+
+        .setting-info h3 {
+            font-size: 16px;
+            font-weight: 600;
             color: #333;
-            margin-bottom: 5px;
+            margin-bottom: 4px;
         }
-        
-        .table-info {
+
+        .setting-info p {
+            font-size: 14px;
             color: #666;
         }
-        
-        .order-list {
-            margin-bottom: 20px;
-        }
-        
-        .order-item {
-            display: flex;
-            justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        
-        .order-name {
-            color: #333;
-            font-size: 14px;
-        }
-        
-        .order-price {
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        .payment-summary {
-            background: #f8f8f8;
-            padding: 15px;
+
+        .toggle {
+            position: relative;
+            width: 50px;
+            height: 24px;
+            background: #ccc;
             border-radius: 12px;
-            margin-bottom: 20px;
-        }
-        
-        .summary-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 8px;
-        }
-        
-        .total-row {
-            border-top: 2px solid #e0e0e0;
-            padding-top: 10px;
-            font-size: 18px;
-            font-weight: bold;
-        }
-        
-        .payment-actions {
-            display: flex;
-            gap: 12px;
-        }
-        
-        .btn-split {
-            flex: 1;
-            padding: 14px;
-            background: #f0f0f0;
-            color: #333;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
             cursor: pointer;
+            transition: background 0.3s ease;
         }
-        
-        .btn-pay {
-            flex: 1;
-            padding: 14px;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            color: white;
-            border: none;
-            border-radius: 12px;
-            font-weight: 600;
-            cursor: pointer;
-        }
-        
-        /* Split Payment Screen */
-        .split-options {
-            padding: 20px;
-        }
-        
-        .split-card {
-            background: #f8f8f8;
-            padding: 20px;
-            border-radius: 12px;
-            margin-bottom: 15px;
-            cursor: pointer;
-            transition: all 0.3s;
-            text-align: center;
-        }
-        
-        .split-card:hover {
+
+        .toggle.active {
             background: #667eea;
-            color: white;
         }
-        
-        .split-icon {
-            font-size: 32px;
-            margin-bottom: 10px;
-        }
-        
-        .split-title {
-            font-size: 16px;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-        
-        .split-desc {
-            font-size: 14px;
-            opacity: 0.8;
-        }
-        
-        .people-list {
-            padding: 20px;
-        }
-        
-        .person-card {
-            display: flex;
-            align-items: center;
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            margin-bottom: 12px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-        }
-        
-        .person-avatar {
-            width: 45px;
-            height: 45px;
-            border-radius: 50%;
-            background: linear-gradient(135deg, #667eea, #764ba2);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-            margin-right: 15px;
-            font-size: 14px;
-        }
-        
-        .person-info {
-            flex: 1;
-        }
-        
-        .person-name {
-            font-weight: 600;
-            color: #333;
-        }
-        
-        .person-status {
-            font-size: 12px;
-            color: #999;
-        }
-        
-        .person-amount {
-            font-size: 16px;
-            font-weight: bold;
-            color: #667eea;
-        }
-        
-        /* Success Screen */
-        .success-screen {
-            padding: 40px;
-            text-align: center;
-        }
-        
-        .success-icon {
-            font-size: 80px;
-            margin-bottom: 20px;
-            animation: bounce 0.5s;
-        }
-        
-        @keyframes bounce {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.2); }
-        }
-        
-        .success-title {
-            font-size: 24px;
-            font-weight: bold;
-            color: #4CAF50;
-            margin-bottom: 10px;
-        }
-        
-        .success-message {
-            color: #666;
-            margin-bottom: 30px;
-        }
-        
-        /* Bottom Navigation */
-        .bottom-nav {
-            position: fixed;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 100%;
-            max-width: 390px;
-            background: white;
-            border-top: 1px solid #e0e0e0;
-            padding: 10px 0;
-            display: flex;
-            justify-content: space-around;
-        }
-        
-        .nav-btn {
-            background: none;
-            border: none;
-            padding: 10px;
-            cursor: pointer;
-            color: #999;
-            font-size: 24px;
-            transition: all 0.2s;
-        }
-        
-        .nav-btn.active {
-            color: #667eea;
-        }
-        
-        .notification-badge {
+
+        .toggle::before {
+            content: '';
             position: absolute;
-            top: -5px;
-            right: -5px;
-            background: #ff4444;
-            color: white;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: white;
             border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 10px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            transition: transform 0.3s ease;
+        }
+
+        .toggle.active::before {
+            transform: translateX(26px);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .app-container {
+                border-radius: 0;
+                max-width: none;
+                width: 100vw;
+                min-height: 100vh;
+            }
+            
+            body {
+                padding: 0;
+            }
         }
     </style>
 </head>
 <body>
-    <div class="phone-container">
+    <div class="app-container">
         <!-- Login Screen -->
-        <div id="loginScreen" class="screen active">
-            <div class="login-screen">
-                <div class="logo">📡</div>
-                <h1 class="app-title">WiFi Presence</h1>
-                <p class="tagline">Conecte-se com pessoas próximas</p>
+        <div class="screen active" id="loginScreen">
+            <div class="login-content">
+                <div class="logo">📶</div>
+                <h1 class="login-title">WiFi Presence</h1>
+                <p class="login-subtitle">Conecte-se com pessoas na mesma rede WiFi e expanda seu networking</p>
                 
-                <div class="input-group">
-                    <label class="input-label">Email</label>
-                    <input type="email" class="input" placeholder="seu@email.com" id="emailInput">
-                </div>
-                
-                <div class="input-group">
-                    <label class="input-label">Senha</label>
-                    <input type="password" class="input" placeholder="••••••" id="passwordInput">
-                </div>
-                
-                <button class="btn-primary" onclick="login()">Entrar</button>
-                <button class="btn-primary demo-btn" onclick="showNetworkSelection()">🚀 Entrar como Demo</button>
-            </div>
-        </div>
-        
-        <!-- Network Selection Screen -->
-        <div id="networkScreen" class="screen">
-            <div style="padding: 30px;">
-                <h2 style="color: #667eea; margin-bottom: 10px;">📍 Onde você está?</h2>
-                <p style="color: #666; margin-bottom: 30px;">Selecione a rede WiFi do local</p>
-                
-                <div id="networkList">
-                    <div class="network-card" onclick="selectNetwork('Starbucks WiFi', 'cafe')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 18px; font-weight: bold; color: #333;">
-                                    ☕ Starbucks Paulista
-                                </div>
-                                <div style="color: #666; margin-top: 5px;">
-                                    42 pessoas conectadas
-                                </div>
-                            </div>
-                            <div style="color: #667eea;">📶 Excelente</div>
-                        </div>
-                    </div>
-                    
-                    <div class="network-card" onclick="selectNetwork('Famiglia Guest', 'restaurant')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 18px; font-weight: bold; color: #333;">
-                                    🍽️ Restaurante Famiglia
-                                </div>
-                                <div style="color: #666; margin-top: 5px;">
-                                    28 pessoas conectadas
-                                </div>
-                            </div>
-                            <div style="color: #667eea;">📶 Ótima</div>
-                        </div>
-                    </div>
-                    
-                    <div class="network-card" onclick="selectNetwork('WeWork Guest', 'coworking')">
-                        <div style="display: flex; justify-content: space-between; align-items: center;">
-                            <div>
-                                <div style="font-size: 18px; font-weight: bold; color: #333;">
-                                    🏢 WeWork Faria Lima
-                                </div>
-                                <div style="color: #666; margin-top: 5px;">
-                                    128 pessoas conectadas
-                                </div>
-                            </div>
-                            <div style="color: #667eea;">📶 Boa</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <!-- Home Screen -->
-        <div id="homeScreen" class="screen">
-            <div class="header">
-                <div class="header-top">
-                    <h2 style="font-size: 24px;">WiFi Presence</h2>
-                    <div class="header-actions">
-                        <button class="header-btn" onclick="openPayment()" style="position: relative;">
-                            💳
-                            <span class="notification-badge" id="paymentBadge" style="display: none;">!</span>
-                        </button>
-                        <button class="header-btn" onclick="alert('Configurações em desenvolvimento')">⚙️</button>
-                    </div>
-                </div>
-                <div class="wifi-info">
-                    <div class="wifi-name" id="currentNetwork">
-                        📶 Conectando...
-                    </div>
-                    <div class="users-count" id="usersCount">Carregando...</div>
-                </div>
-            </div>
-            
-            <div class="user-list">
-                <h3 class="section-title">Pessoas Próximas</h3>
-                <div id="usersList"></div>
-            </div>
-            
-            <div class="bottom-nav">
-                <button class="nav-btn active">🏠</button>
-                <button class="nav-btn" onclick="openPayment()" style="position: relative;">
-                    💳
-                    <span class="notification-badge" id="paymentBadgeNav" style="display: none;">!</span>
+                <button class="btn btn-primary" onclick="showScreen('wifiScreen')">
+                    Começar Agora
                 </button>
-                <button class="nav-btn">💬</button>
-                <button class="nav-btn">👤</button>
+                <button class="btn btn-secondary" onclick="demoMode()">
+                    Ver Demo
+                </button>
             </div>
         </div>
-    </div>
-    
-    <!-- Payment Modal -->
-    <div id="paymentModal" class="modal">
-        <div class="modal-content">
-            <div id="paymentMainScreen">
-                <div class="modal-header">
-                    <span class="modal-title">💳 WiFi Pay</span>
-                    <button class="close-modal" onclick="closePayment()">✕</button>
-                </div>
-                
-                <div class="payment-content">
-                    <div class="establishment-info">
-                        <div class="establishment-name" id="establishmentName">Carregando...</div>
-                        <div class="table-info">Mesa 12 detectada automaticamente</div>
-                    </div>
-                    
-                    <div class="order-list" id="orderList">
-                        <!-- Orders will be populated here -->
-                    </div>
-                    
-                    <div class="payment-summary">
-                        <div class="summary-row">
-                            <span>Subtotal</span>
-                            <span id="subtotal">R$ 0,00</span>
-                        </div>
-                        <div class="summary-row">
-                            <span>Taxa de serviço (10%)</span>
-                            <span id="serviceFee">R$ 0,00</span>
-                        </div>
-                        <div class="summary-row total-row">
-                            <span>Total</span>
-                            <span id="total">R$ 0,00</span>
-                        </div>
-                    </div>
-                    
-                    <div class="payment-actions">
-                        <button class="btn-split" onclick="showSplitOptions()">Dividir Conta</button>
-                        <button class="btn-pay" onclick="payFull()">Pagar Total</button>
-                    </div>
-                </div>
+
+        <!-- WiFi Selection Screen -->
+        <div class="screen" id="wifiScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('loginScreen')">←</button>
+                <h1>Selecionar Rede WiFi</h1>
+                <p>Escolha a rede WiFi que você está conectado</p>
             </div>
             
-            <div id="splitScreen" style="display: none;">
-                <div class="modal-header">
-                    <span class="modal-title">👥 Dividir Conta</span>
-                    <button class="close-modal" onclick="showPaymentMain()">←</button>
+            <div class="wifi-list">
+                <div class="wifi-item" onclick="selectWifi('CafeConnect_5G', 'Café Connect - 5G')">
+                    <div class="wifi-info">
+                        <div class="wifi-icon">📶</div>
+                        <div class="wifi-details">
+                            <h3>CafeConnect_5G</h3>
+                            <p>Café Connect - Velocidade Alta</p>
+                        </div>
+                    </div>
+                    <div class="wifi-signal">●●●○</div>
                 </div>
-                
-                <div class="split-options">
-                    <div class="split-card" onclick="splitEqually()">
-                        <div class="split-icon">🟰</div>
-                        <div class="split-title">Dividir Igualmente</div>
-                        <div class="split-desc">R$ <span id="equalAmount">0,00</span> para cada</div>
+
+                <div class="wifi-item" onclick="selectWifi('CoWorking_Space', 'CoWorking Space Premium')">
+                    <div class="wifi-info">
+                        <div class="wifi-icon">📶</div>
+                        <div class="wifi-details">
+                            <h3>CoWorking_Space</h3>
+                            <p>Espaço de Coworking Premium</p>
+                        </div>
                     </div>
-                    
-                    <div class="split-card" onclick="alert('Em desenvolvimento')">
-                        <div class="split-icon">📝</div>
-                        <div class="split-title">Por Item Consumido</div>
-                        <div class="split-desc">Cada um paga o que pediu</div>
+                    <div class="wifi-signal">●●●●</div>
+                </div>
+
+                <div class="wifi-item" onclick="selectWifi('UniversityNet', 'Rede Universitária')">
+                    <div class="wifi-info">
+                        <div class="wifi-icon">📶</div>
+                        <div class="wifi-details">
+                            <h3>UniversityNet</h3>
+                            <p>Campus Universitário</p>
+                        </div>
                     </div>
-                    
-                    <div class="split-card" onclick="alert('Em desenvolvimento')">
-                        <div class="split-icon">⚙️</div>
-                        <div class="split-title">Personalizado</div>
-                        <div class="split-desc">Definir valores manualmente</div>
+                    <div class="wifi-signal">●●●●</div>
+                </div>
+
+                <div class="wifi-item" onclick="selectWifi('TechHub_Guest', 'Hub de Tecnologia')">
+                    <div class="wifi-info">
+                        <div class="wifi-icon">📶</div>
+                        <div class="wifi-details">
+                            <h3>TechHub_Guest</h3>
+                            <p>Hub de Tecnologia - Visitantes</p>
+                        </div>
                     </div>
+                    <div class="wifi-signal">●●○○</div>
+                </div>
+
+                <div class="wifi-item" onclick="selectWifi('EventCenter_Free', 'Centro de Eventos')">
+                    <div class="wifi-info">
+                        <div class="wifi-icon">📶</div>
+                        <div class="wifi-details">
+                            <h3>EventCenter_Free</h3>
+                            <p>Centro de Eventos - Gratuito</p>
+                        </div>
+                    </div>
+                    <div class="wifi-signal">●●●○</div>
                 </div>
             </div>
-            
-            <div id="splitConfirmScreen" style="display: none;">
-                <div class="modal-header">
-                    <span class="modal-title">✅ Confirmação</span>
-                    <button class="close-modal" onclick="showSplitOptions()">←</button>
-                </div>
-                
-                <div class="people-list" id="peopleList">
-                    <!-- People will be populated here -->
-                </div>
-                
-                <div class="payment-actions" style="padding: 20px;">
-                    <button class="btn-pay" onclick="confirmPayment()">Confirmar Minha Parte</button>
-                </div>
-            </div>
-            
-            <div id="successScreen" style="display: none;">
-                <div class="success-screen">
-                    <div class="success-icon">✅</div>
-                    <div class="success-title">Pagamento Confirmado!</div>
-                    <div class="success-message">
-                        <p id="successMessage">Sua parte foi paga com sucesso</p>
-                        <p style="margin-top: 10px; font-size: 14px;">📧 Comprovante enviado por email</p>
-                        <p style="font-size: 14px;">🎁 Você ganhou pontos de fidelidade!</p>
-                    </div>
-                    <button class="btn-primary" onclick="closePayment()">Fechar</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script>
-        let currentNetwork = '';
-        let currentType = '';
-        let currentBill = 0;
-        
-        const mockUsers = {
-            cafe: [
-                {
-                    name: 'Ana Silva',
-                    title: 'Product Designer',
-                    bio: 'Criando experiências digitais incríveis',
-                    interests: ['Design', 'UX/UI', 'Startup'],
-                    status: 'available'
-                },
-                {
-                    name: 'Carlos Mendes',
-                    title: 'Developer',
-                    bio: 'Full Stack | React | Node.js',
-                    interests: ['Tech', 'AI', 'Web3'],
-                    status: 'busy'
-                }
-            ],
-            restaurant: [
-                {
-                    name: 'Maria Costa',
-                    title: 'Marketing Manager',
-                    bio: 'Growth hacking e estratégias digitais',
-                    interests: ['Marketing', 'Growth'],
-                    status: 'available'
-                },
-                {
-                    name: 'Pedro Santos',
-                    title: 'Entrepreneur',
-                    bio: 'Fundador @ StartupXYZ',
-                    interests: ['Business', 'Networking'],
-                    status: 'available'
-                },
-                {
-                    name: 'Ana Oliveira',
-                    title: 'Designer',
-                    bio: 'UI/UX | Branding',
-                    interests: ['Design', 'Arte'],
-                    status: 'available'
-                }
-            ],
-            coworking: [
-                {
-                    name: 'Roberto Lima',
-                    title: 'CEO @ InnovateCo',
-                    bio: 'Transformando ideias em negócios',
-                    interests: ['Startups', 'Investimento'],
-                    status: 'available'
-                },
-                {
-                    name: 'Julia Ferreira',
-                    title: 'Data Scientist',
-                    bio: 'Machine Learning | Analytics',
-                    interests: ['AI', 'Data', 'Python'],
-                    status: 'available'
-                }
-            ]
-        };
-        
-        const restaurantOrders = [
-            { name: 'Pizza Margherita', price: 65 },
-            { name: 'Lasanha Bolonhesa', price: 48 },
-            { name: 'Refrigerantes (4x)', price: 32 },
-            { name: 'Sobremesas (2x)', price: 36 }
-        ];
-        
-        function login() {
-            const email = document.getElementById('emailInput').value;
-            const password = document.getElementById('passwordInput').value;
-            
-            if (!email || !password) {
-                alert('Por favor, preencha todos os campos');
-                return;
-            }
-            
-            showNetworkSelection();
-        }
-        
-        function showNetworkSelection() {
-            document.getElementById('loginScreen').classList.remove('active');
-            document.getElementById('networkScreen').classList.add('active');
-        }
-        
-        function selectNetwork(network, type) {
-            currentNetwork = network;
-            currentType = type;
-            
-            // Update home screen
-            document.getElementById('currentNetwork').innerHTML = `📶 ${network}`;
-            const users = mockUsers[type] || [];
-            document.getElementById('usersCount').textContent = `${users.length} pessoas conectadas`;
-            
-            // Show payment badge for restaurant
-            if (type === 'restaurant') {
-                document.getElementById('paymentBadge').style.display = 'flex';
-                document.getElementById('paymentBadgeNav').style.display = 'flex';
-                currentBill = 181; // Restaurant bill
-            }
-            
-            // Load users
-            loadUsers(type);
-            
-            // Show home screen
-            document.getElementById('networkScreen').classList.remove('active');
-            document.getElementById('homeScreen').classList.add('active');
-        }
-        
-        function loadUsers(type) {
-            const users = mockUsers[type] || [];
-            const usersList = document.getElementById('usersList');
-            usersList.innerHTML = '';
-            
-            users.forEach(user => {
-                const initials = user.name.split(' ').map(n => n[0]).join('');
-                const userCard = `
-                    <div class="user-card">
-                        <div class="user-header">
-                            <div class="user-avatar">
-                                ${initials}
-                                <div class="status-dot ${user.status}"></div>
-                            </div>
-                            <div class="user-info">
-                                <div class="user-name">${user.name}</div>
-                                <div class="user-title">${user.title}</div>
-                            </div>
-                        </div>
-                        <p class="user-bio">${user.bio}</p>
-                        <div class="interests">
-                            ${user.interests.map(i => `<span class="interest-tag">${i}</span>`).join('')}
-                        </div>
-                        <div class="user-actions">
-                            <button class="social-btn">💚</button>
-                            <button class="social-btn">📷</button>
-                            <button class="connect-btn">Conectar</button>
-                        </div>
-                    </div>
-                `;
-                usersList.innerHTML += userCard;
-            });
-        }
-        
-        function openPayment() {
-            const modal = document.getElementById('paymentModal');
-            modal.classList.add('active');
-            
-            if (currentType === 'restaurant') {
-                document.getElementById('establishmentName').textContent = 'Restaurante Famiglia';
-                loadOrders();
-            } else if (currentType === 'cafe') {
-                document.getElementById('establishmentName').textContent = 'Starbucks Paulista';
-                loadCafeOrders();
-            } else {
-                document.getElementById('establishmentName').textContent = 'WeWork Faria Lima';
-                document.querySelector('.establishment-info').innerHTML = `
-                    <div class="establishment-name">WeWork Faria Lima</div>
-                    <div class="table-info">Sem consumo pendente</div>
-                `;
-            }
-        }
-        
-        function loadOrders() {
-            const orderList = document.getElementById('orderList');
-            orderList.innerHTML = '<h4 style="margin-bottom: 10px;">Seus pedidos:</h4>';
-            
-            let subtotal = 0;
-            restaurantOrders.forEach(order => {
-                orderList.innerHTML += `
-                    <div class="order-item">
-                        <span class="order-name">${order.name}</span>
-                        <span class="order-price">R$ ${order.price},00</span>
-                    </div>
-                `;
-                subtotal += order.price;
-            });
-            
-            const serviceFee = subtotal * 0.1;
-            const total = subtotal + serviceFee;
-            currentBill = total;
-            
-            document.getElementById('subtotal').textContent = `R$ ${subtotal},00`;
-            document.getElementById('serviceFee').textContent = `R$ ${serviceFee.toFixed(2).replace('.', ',')}`;
-            document.getElementById('total').textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
-            document.getElementById('equalAmount').textContent = (total / 4).toFixed(2).replace('.', ',');
-        }
-        
-        function loadCafeOrders() {
-            const orderList = document.getElementById('orderList');
-            orderList.innerHTML = '<h4 style="margin-bottom: 10px;">Consumo de hoje:</h4>';
-            
-            const cafeOrders = [
-                { name: 'Cappuccino Grande', price: 18 },
-                { name: 'Sandwich Club', price: 35 },
-                { name: 'Flat White', price: 16 }
-            ];
-            
-            let subtotal = 0;
-            cafeOrders.forEach(order => {
-                orderList.innerHTML += `
-                    <div class="order-item">
-                        <span class="order-name">${order.name}</span>
-                        <span class="order-price">R$ ${order.price},00</span>
-                    </div>
-                `;
-                subtotal += order.price;
-            });
-            
-            currentBill = subtotal;
-            document.getElementById('subtotal').textContent = `R$ ${subtotal},00`;
-            document.getElementById('serviceFee').textContent = `R$ 0,00`;
-            document.getElementById('total').textContent = `R$ ${subtotal},00`;
-        }
-        
-        function closePayment() {
-            document.getElementById('paymentModal').classList.remove('active');
-            showPaymentMain();
-            // Remove badges
-            document.getElementById('paymentBadge').style.display = 'none';
-            document.getElementById('paymentBadgeNav').style.display = 'none';
-        }
-        
-        function showPaymentMain() {
-            document.getElementById('paymentMainScreen').style.display = 'block';
-            document.getElementById('splitScreen').style.display = 'none';
-            document.getElementById('splitConfirmScreen').style.display = 'none';
-            document.getElementById('successScreen').style.display = 'none';
-        }
-        
-        function showSplitOptions() {
-            document.getElementById('paymentMainScreen').style.display = 'none';
-            document.getElementById('splitScreen').style.display = 'block';
-        }
-        
-        function splitEqually() {
-            document.getElementById('splitScreen').style.display = 'none';
-            document.getElementById('splitConfirmScreen').style.display = 'block';
-            
-            const peopleList = document.getElementById('peopleList');
-            const equalAmount = (currentBill / 4).toFixed(2).replace('.', ',');
-            
-            peopleList.innerHTML = `
-                <div class="person-card">
-                    <div class="person-avatar">EU</div>
-                    <div class="person-info">
-                        <div class="person-name">Você</div>
-                        <div class="person-status">✅ Pronto para pagar</div>
-                    </div>
-                    <div class="person-amount">R$ ${equalAmount}</div>
-                </div>
-                <div class="person-card">
-                    <div class="person-avatar">MS</div>
-                    <div class="person-info">
-                        <div class="person-name">Maria Silva</div>
-                        <div class="person-status">⏳ Aguardando</div>
-                    </div>
-                    <div class="person-amount">R$ ${equalAmount}</div>
-                </div>
-                <div class="person-card">
-                    <div class="person-avatar">PS</div>
-                    <div class="person-info">
-                        <div class="person-name">Pedro Santos</div>
-                        <div class="person-status">⏳ Aguardando</div>
-                    </div>
-                    <div class="person-amount">R$ ${equalAmount}</div>
-                </div>
-                <div class="person-card">
-                    <div class="person-avatar">AO</div>
-                    <div class="person-info">
-                        <div class="person-name">Ana Oliveira</div>
-                        <div class="person-status">⏳ Aguardando</div>
-                    </div>
-                    <div class="person-amount">R$ ${equalAmount}</div>
-                </div>
-            `;
-        }
-        
-        function payFull() {
-            if (confirm(`Confirmar pagamento total de R$ ${currentBill.toFixed(2).replace('.', ',')}?`)) {
-                showSuccess('Pagamento total realizado com sucesso!');
-            }
-        }
-        
-        function confirmPayment() {
-            showSuccess('Sua parte foi paga com sucesso!');
-            
-            // Simulate others confirming
-            setTimeout(() => {
-                const cards = document.querySelectorAll('.person-card');
-                if (cards[1]) {
-                    cards[1].querySelector('.person-status').textContent = '✅ Pago';
-                }
-            }, 3000);
-        }
-        
-        function showSuccess(message) {
-            document.getElementById('paymentMainScreen').style.display = 'none';
-            document.getElementById('splitScreen').style.display = 'none';
-            document.getElementById('splitConfirmScreen').style.display = 'none';
-            document.getElementById('successScreen').style.display = 'block';
-            document.getElementById('successMessage').textContent = message;
-        }
-        
-        // Auto-detect restaurant bill after 3 seconds
-        setTimeout(() => {
-            if (currentType === 'restaurant') {
-                const notification = document.createElement('div');
-                notification.style.cssText = `
-                    position: fixed;
-                    top: 80px;
-                    left: 50%;
-                    transform: translateX(-50%);
-                    background: white;
-                    padding: 15px 20px;
-                    border-radius: 12px;
-                    box-shadow: 0 4px 20px rgba(0,0,0,0.2);
-                    z-index: 2000;
-                    max-width: 350px;
-                    animation: slideDown 0.5s ease;
-                `;
-                notification.innerHTML = `
-                    <div style="display: flex; align-items: center; gap: 12px;">
-                        <span style="font-size: 24px;">💳</span>
-                        <div>
-                            <div style="font-weight: bold; color: #333;">Conta disponível</div>
-                            <div style="font-size: 14px; color: #666;">Mesa 12 - R$ 199,10</div>
-                        </div>
-                    </div>
-                `;
-                document.body.appendChild(notification);
-                
-                setTimeout(() => notification.remove(), 4000);
-            }
-        }, 3000);
-        
-        // Add animation
-        const style = document.createElement('style');
-        style.textContent = `
-            @keyframes slideDown {
-                from { transform: translate(-50%, -100%); opacity: 0; }
-                to { transform: translate(-50%, 0); opacity: 1; }
-            }
-        `;
-        document.head.appendChild(style);
+
+            <div style="padding: 20px;">
+                <button class="btn btn-primary" onclick="showScreen('permissionScreen')" i
