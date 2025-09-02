@@ -1,999 +1,4 @@
-<div style="padding: 20px;">
-                <button class="btn btn-primary" onclick="showScreen('permissionScreen')" id="continueBtn" style="opacity: 0.5; pointer-events: none;">
-                    Continuar
-                </button>
-            </div>
-        </div>
-
-        <!-- Permission Screen -->
-        <div class="screen" id="permissionScreen">
-            <div class="header">
-                <button class="back-btn" onclick="showScreen('wifiScreen')">←</button>
-                <h1>Permissões</h1>
-                <p>Para uma melhor experiência</p>
-            </div>
-            
-            <div class="permission-content">
-                <div class="permission-icon">🔒</div>
-                <h2>Precisamos de algumas permissões</h2>
-                <p style="color: #666; margin-bottom: 30px;">Essas permissões nos ajudam a conectar você com pessoas próximas de forma segura</p>
-                
-                <div class="permission-list">
-                    <div class="permission-item">
-                        <div class="permission-item-icon">📍</div>
-                        <div>
-                            <h3>Localização</h3>
-                            <p>Para detectar usuários na mesma rede WiFi</p>
-                        </div>
-                    </div>
-
-                    <div class="permission-item">
-                        <div class="permission-item-icon">📶</div>
-                        <div>
-                            <h3>Acesso à Rede</h3>
-                            <p>Para verificar conectividade e qualidade</p>
-                        </div>
-                    </div>
-
-                    <div class="permission-item">
-                        <div class="permission-item-icon">🔔</div>
-                        <div>
-                            <h3>Notificações</h3>
-                            <p>Para avisar sobre novos matches e mensagens</p>
-                        </div>
-                    </div>
-
-                    <div class="permission-item">
-                        <div class="permission-item-icon">🏪</div>
-                        <div>
-                            <h3>Notificações do Estabelecimento</h3>
-                            <p>Receber promoções, novidades e ofertas especiais</p>
-                        </div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="showScreen('profileScreen')">
-                    Permitir e Continuar
-                </button>
-                <button class="btn btn-secondary" onclick="showScreen('profileScreen')">
-                    Pular por Agora
-                </button>
-            </div>
-        </div>
-
-        <!-- Profile Setup Screen -->
-        <div class="screen" id="profileScreen">
-            <div class="header">
-                <button class="back-btn" onclick="showScreen('permissionScreen')">←</button>
-                <h1>Seu Perfil</h1>
-                <p>Conte um pouco sobre você</p>
-            </div>
-            
-            <div class="profile-form">
-                <div class="form-group">
-                    <label class="form-label">Nome</label>
-                    <input type="text" class="form-input" id="userName" placeholder="Seu nome completo">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Profissão</label>
-                    <input type="text" class="form-input" id="userProfession" placeholder="Ex: Desenvolvedor, Designer, etc.">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Bio</label>
-                    <textarea class="form-input form-textarea" id="userBio" placeholder="Conte um pouco sobre você..."></textarea>
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">WhatsApp (opcional)</label>
-                    <input type="tel" class="form-input" id="userWhatsapp" placeholder="(11) 99999-9999">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Instagram (opcional)</label>
-                    <input type="text" class="form-input" id="userInstagram" placeholder="@seuinstagram">
-                </div>
-
-                <div class="form-group">
-                    <label class="form-label">Interesses</label>
-                    <div class="interests-grid">
-                        <div class="interest-tag" onclick="toggleInterest(this)">💻 Tecnologia</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">🎨 Design</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">📈 Negócios</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">🎵 Música</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">✈️ Viagens</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">📚 Educação</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">🏃 Esportes</div>
-                        <div class="interest-tag" onclick="toggleInterest(this)">🍕 Gastronomia</div>
-                    </div>
-                </div>
-
-                <button class="btn btn-primary" onclick="completeSetup()">
-                    Finalizar Perfil
-                </button>
-            </div>
-        </div>
-
-        <!-- Home Screen -->
-        <div class="screen" id="homeScreen">
-            <div class="home-header">
-                <div class="user-info">
-                    <h2 id="welcomeName">Olá, Usuário!</h2>
-                    <p id="currentNetwork">Conectado em: WiFi</p>
-                </div>
-                <button class="settings-btn" onclick="openSettings()">⚙️</button>
-            </div>
-
-            <div class="online-count">
-                <strong id="onlineCount">5 pessoas</strong> online nesta rede
-            </div>
-
-            <!-- Payment by Proximity -->
-            <div class="payment-proximity" id="proximityPayment" style="display: none;">
-                <div class="proximity-header">
-                    <div>
-                        <div style="font-size: 18px; font-weight: 600;">💳 Pagamento Solicitado</div>
-                        <div style="font-size: 14px; opacity: 0.9;" id="merchantName">Café Connect</div>
-                    </div>
-                    <div class="proximity-amount" id="paymentAmount">R$ 18,50</div>
-                </div>
-                
-                <div class="proximity-details">
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Mesa:</span>
-                        <span id="tableLocation">Balcão 3</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
-                        <span>Cartão:</span>
-                        <span id="selectedCard">•••• 4242</span>
-                    </div>
-                    <div style="display: flex; justify-content: space-between;">
-                        <span>Itens:</span>
-                        <span id="orderItems">Cappuccino, Croissant</span>
-                    </div>
-                </div>
-
-                <div class="proximity-actions">
-                    <button class="btn-approve" onclick="approvePayment()">
-                        🔒 Pagar com Biometria
-                    </button>
-                    <button class="btn-decline" onclick="declinePayment()">
-                        ✖️ Recusar
-                    </button>
-                </div>
-            </div>
-
-            <!-- Auto Detection -->
-            <div class="auto-detection" id="autoDetection" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center;">
-                    <div>
-                        <div style="font-size: 16px; font-weight: 600;">🎯 Detectando usuários...</div>
-                        <div style="font-size: 14px; opacity: 0.9;">Mesa 12 - Restaurante Famiglia</div>
-                    </div>
-                    <div style="font-size: 20px;">📡</div>
-                </div>
-                <div class="detected-users">
-                    <div class="detected-user">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">V</div>
-                        <span>Você</span>
-                    </div>
-                    <div class="detected-user">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">AS</div>
-                        <span>Ana Silva</span>
-                    </div>
-                    <div class="detected-user">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">CS</div>
-                        <span>Carlos Santos</span>
-                    </div>
-                    <div class="detected-user">
-                        <div style="width: 40px; height: 40px; border-radius: 50%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-weight: 600; font-size: 14px; margin-bottom: 5px;">MC</div>
-                        <span>Marina Costa</span>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Enhanced Split Bill -->
-            <div class="split-bill" id="splitBillAdvanced" style="display: none;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
-                    <h3>🍽️ Dividir Conta</h3>
-                    <div style="font-size: 20px; font-weight: 700; color: #667eea;">R$ 400,00</div>
-                </div>
-                
-                <div class="division-options">
-                    <div class="division-btn active" onclick="switchDivision('equal')">
-                        ⚖️ Igual
-                    </div>
-                    <div class="division-btn" onclick="switchDivision('custom')">
-                        🎯 Personalizada
-                    </div>
-                </div>
-
-                <!-- Equal Division -->
-                <div id="equalDivision">
-                    <p style="color: #666; margin-bottom: 15px;">4 pessoas × R$ 100,00 cada</p>
-                    
-                    <div class="split-users">
-                        <div class="split-user">
-                            <span>Você</span>
-                            <span class="split-amount">R$ 100,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Ana Silva</span>
-                            <span class="split-amount">R$ 100,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Carlos Santos</span>
-                            <span class="split-amount">R$ 100,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Marina Costa</span>
-                            <span class="split-amount">R$ 100,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Custom Division -->
-                <div id="customDivision" style="display: none;">
-                    <p style="color: #666; margin-bottom: 15px;">Toque nos itens para atribuir</p>
-                    
-                    <div class="bill-items">
-                        <div class="bill-item" onclick="assignItem(this, 'pizza', 85)">
-                            <div class="item-info">
-                                <div class="item-icon">🍕</div>
-                                <div class="item-details">
-                                    <h4>Pizza Margherita (Grande)</h4>
-                                    <p>Para 2-3 pessoas</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 85,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'salada', 35)">
-                            <div class="item-info">
-                                <div class="item-icon">🥗</div>
-                                <div class="item-details">
-                                    <h4>Salada Caesar</h4>
-                                    <p>Individual</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 35,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'massa', 75)">
-                            <div class="item-info">
-                                <div class="item-icon">🍝</div>
-                                <div class="item-details">
-                                    <h4>Spaghetti Carbonara</h4>
-                                    <p>Individual</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 75,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'risotto', 68)">
-                            <div class="item-info">
-                                <div class="item-icon">🍚</div>
-                                <div class="item-details">
-                                    <h4>Risotto de Camarão</h4>
-                                    <p>Individual</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 68,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'bebidas', 55)">
-                            <div class="item-info">
-                                <div class="item-icon">🍷</div>
-                                <div class="item-details">
-                                    <h4>Bebidas Variadas</h4>
-                                    <p>2 vinhos + 2 refrigerantes</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 55,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'sobremesa', 42)">
-                            <div class="item-info">
-                                <div class="item-icon">🍰</div>
-                                <div class="item-details">
-                                    <h4>Tiramisù + Gelato</h4>
-                                    <p>2 sobremesas</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 42,00</div>
-                        </div>
-
-                        <div class="bill-item" onclick="assignItem(this, 'servico', 40)">
-                            <div class="item-info">
-                                <div class="item-icon">💫</div>
-                                <div class="item-details">
-                                    <h4>Taxa de Serviço</h4>
-                                    <p>10% sobre o total</p>
-                                </div>
-                            </div>
-                            <div class="item-price">R$ 40,00</div>
-                        </div>
-                    </div>
-
-                    <div class="split-users" id="customSplitUsers">
-                        <div class="split-user">
-                            <span>Você</span>
-                            <span class="split-amount" id="yourTotal">R$ 0,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Ana Silva</span>
-                            <span class="split-amount" id="anaTotal">R$ 0,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Carlos Santos</span>
-                            <span class="split-amount" id="carlosTotal">R$ 0,00</span>
-                        </div>
-                        <div class="split-user">
-                            <span>Marina Costa</span>
-                            <span class="split-amount" id="marinaTotal">R$ 0,00</span>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="cashback-info">
-                    <div style="font-size: 14px; font-weight: 600;">🎁 Cashback Automático</div>
-                    <div style="font-size: 12px; margin-top: 4px;">Ganhe 2% de volta (R$ 8,00) + Pontos de Fidelidade</div>
-                </div>
-
-                <button class="btn btn-primary" onclick="confirmAdvancedSplit()" id="confirmSplitBtn">
-                    Confirmar Minha Parte (R$ 100,00)
-                </button>
-            </div>
-
-            <!-- Consolidated Orders -->
-            <div class="consolidated-orders" id="consolidatedOrders" style="display: none;">
-                <h3 style="margin-bottom: 15px;">☕ Sessão no Starbucks</h3>
-                <p style="color: #666; margin-bottom: 20px;">Pedidos realizados hoje</p>
-                
-                <div class="order-session">
-                    <div class="order-time">09:15 - Entrada</div>
-                    <div class="order-items">
-                        <span class="order-tag">Cappuccino Grande</span>
-                        <span class="order-tag">Croissant Amêndoas</span>
-                    </div>
-                    <div class="order-total">R$ 18,50</div>
-                </div>
-
-                <div class="order-session">
-                    <div class="order-time">11:30 - Segundo Café</div>
-                    <div class="order-items">
-                        <span class="order-tag">Americano</span>
-                        <span class="order-tag">Cookie Chocolate</span>
-                    </div>
-                    <div class="order-total">R$ 15,90</div>
-                </div>
-
-                <div class="order-session">
-                    <div class="order-time">14:15 - Almoço</div>
-                    <div class="order-items">
-                        <span class="order-tag">Wrap de Frango</span>
-                        <span class="order-tag">Suco Natural</span>
-                        <span class="order-tag">Brownie</span>
-                    </div>
-                    <div class="order-total">R$ 35,00</div>
-                </div>
-
-                <div style="display: flex; justify-content: space-between; font-weight: 700; font-size: 18px; padding: 20px 0; border-top: 2px solid #e9ecef; margin-top: 15px; color: #667eea;">
-                    <span>Total da Sessão:</span>
-                    <span>R$ 69,40</span>
-                </div>
-
-                <div class="cashback-info">
-                    <div style="font-size: 14px; font-weight: 600;">🏆 Permanência Longa Detectada!</div>
-                    <div style="font-size: 12px; margin-top: 4px;">Cashback duplo: 4% (R$ 2,78) + 50 pontos extras</div>
-                </div>
-
-                <button class="btn btn-primary" onclick="payConsolidatedOrder()">
-                    💳 Pagar Tudo de Uma Vez (R$ 69,40)
-                </button>
-            </div>
-
-            <!-- Payment Setup -->
-            <div class="payment-setup" id="paymentSetup" style="display: none;">
-                <h3 style="margin-bottom: 15px;">💳 Configurar Pagamento por Proximidade</h3>
-                <p style="color: #666; margin-bottom: 20px;">Adicione um cartão para pagamentos automáticos via WiFi</p>
-                
-                <div class="card-form">
-                    <input type="text" class="card-input" placeholder="Número do Cartão" id="cardNumber">
-                    <input type="text" class="card-input" placeholder="Nome no Cartão" id="cardName">
-                    <div class="card-row">
-                        <input type="text" class="card-input" placeholder="MM/AA" id="cardExpiry">
-                        <input type="text" class="card-input" placeholder="CVV" id="cardCvv">
-                    </div>
-                    
-                    <div style="margin: 20px 0;">
-                        <label style="display: flex; align-items: center; gap: 10px;">
-                            <input type="checkbox" id="autoApprove">
-                            <span>Aprovar automaticamente até R$ 50,00</span>
-                        </label>
-                    </div>
-
-                    <button class="btn btn-primary" onclick="setupProximityPayment()">
-                        Configurar Pagamento
-                    </button>
-                </div>
-            </div>
-
-            <!-- Payment History -->
-            <div class="proximity-history" id="paymentHistory" style="display: none;">
-                <h3 style="margin-bottom: 15px;">📊 Histórico de Pagamentos</h3>
-                
-                <div class="history-item">
-                    <div class="history-info">
-                        <h4>Restaurante Famiglia</h4>
-                        <p>Hoje, 14:30 - Mesa 7</p>
-                    </div>
-                    <div class="history-amount">R$ 85,00</div>
-                </div>
-
-                <div class="history-item">
-                    <div class="history-info">
-                        <h4>Café Connect</h4>
-                        <p>Ontem, 09:15 - Balcão 3</p>
-                    </div>
-                    <div class="history-amount">R$ 18,50</div>
-                </div>
-
-                <div class="history-item">
-                    <div class="history-info">
-                        <h4>Hub TechSpace</h4>
-                        <p>Ontem, 16:45 - Mesa Cowork</p>
-                    </div>
-                    <div class="history-amount">R$ 35,00</div>
-                </div>
-            </div>
-
-            <div class="premium-banner" onclick="showScreen('premiumScreen')">
-                <h3>🔥 Upgrade para Premium</h3>
-                <p>Desbloqueie recursos exclusivos e matches ilimitados</p>
-            </div>
-
-            <div class="users-list" id="usersList">
-                <!-- Users will be populated by JavaScript -->
-            </div>
-        </div>
-
-        <!-- Settings Modal -->
-        <div class="modal" id="settingsModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h2 class="modal-title">Configurações</h2>
-                    <button class="close-btn" onclick="closeSettings()">×</button>
-                </div>
-                
-                <div class="settings-list">
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Visibilidade</h3>
-                            <p>Aparecer para outros usuários</p>
-                        </div>
-                        <div class="toggle active" onclick="toggleSetting(this)"></div>
-                    </div>
-
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Notificações</h3>
-                            <p>Receber alertas de novos matches</p>
-                        </div>
-                        <div class="toggle active" onclick="toggleSetting(this)"></div>
-                    </div>
-
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Promoções do Estabelecimento</h3>
-                            <p>Receber ofertas e novidades do local</p>
-                        </div>
-                        <div class="toggle active" onclick="toggleSetting(this)"></div>
-                    </div>
-
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Auto-connect</h3>
-                            <p>Conectar automaticamente em redes conhecidas</p>
-                        </div>
-                        <div class="toggle" onclick="toggleSetting(this)"></div>
-                    </div>
-
-                    <div class="setting-item">
-                        <div class="setting-info">
-                            <h3>Modo Privado</h3>
-                            <p>Ocultar informações pessoais</p>
-                        </div>
-                        <div class="toggle" onclick="toggleSetting(this)"></div>
-                    </div>
-                </div>
-
-                <div style="padding: 20px;">
-                    <button class="btn btn-secondary" onclick="logout()">
-                        Sair do App
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <script>
-        // App State
-        let currentNetwork = '';
-        let currentNetworkName = '';
-        let userProfile = {};
-        let selectedPlan = '';
-        let selectedPaymentMethod = '';
-        let isPremium = false;
-        let hasPaymentSetup = false;
-        let currentPaymentRequest = null;
-        let divisionMode = 'equal';
-        let customBillAssignments = {
-            'you': { name: 'Você', items: [], total: 0 },
-            'ana': { name: 'Ana Silva', items: [], total: 0 },
-            'carlos': { name: 'Carlos Santos', items: [], total: 0 },
-            'marina': { name: 'Marina Costa', items: [], total: 0 }
-        };
-        let currentAssignee = 'you';
-        let assigneeIndex = 0;
-        
-        // Mock data for different networks
-        const networkUsers = {
-            'CafeConnect_5G': [
-                {
-                    name: 'Ana Silva',
-                    profession: 'UX Designer',
-                    bio: 'Apaixonada por criar experiências digitais incríveis. Sempre em busca de inspiração!',
-                    interests: ['Design', 'Tecnologia', 'Música'],
-                    match: 85,
-                    whatsapp: '+5511999999999',
-                    instagram: '@anasilva.design'
-                },
-                {
-                    name: 'Carlos Santos',
-                    profession: 'Desenvolvedor Full-Stack',
-                    bio: 'Transformando ideias em código. Café e JavaScript são meus combustíveis.',
-                    interests: ['Tecnologia', 'Educação', 'Esportes'],
-                    match: 72,
-                    whatsapp: '+5511888888888',
-                    instagram: '@carlos.dev'
-                }
-            ],
-            'CoWorking_Space': [
-                {
-                    name: 'Rafael Lima',
-                    profession: 'Product Manager',
-                    bio: 'Estratégia e inovação são minha paixão. Conectando pessoas e ideias.',
-                    interests: ['Negócios', 'Tecnologia', 'Educação'],
-                    match: 92,
-                    whatsapp: '+5511666666666',
-                    instagram: '@rafael.pm'
-                },
-                {
-                    name: 'Juliana Rocha',
-                    profession: 'Data Scientist',
-                    bio: 'Encontrando insights valiosos nos dados. Machine Learning é meu hobby.',
-                    interests: ['Tecnologia', 'Educação', 'Música'],
-                    match: 78,
-                    whatsapp: '+5511555555555',
-                    instagram: '@ju.data'
-                }
-            ]
-        };
-
-        // Utility Functions
-        function showScreen(screenId) {
-            document.querySelectorAll('.screen').forEach(screen => {
-                screen.classList.remove('active');
-            });
-            document.getElementById(screenId).classList.add('active');
-        }
-
-        function selectWifi(networkId, networkName) {
-            document.querySelectorAll('.wifi-item').forEach(item => {
-                item.classList.remove('selected');
-            });
-            
-            event.target.closest('.wifi-item').classList.add('selected');
-            currentNetwork = networkId;
-            currentNetworkName = networkName;
-            
-            const continueBtn = document.getElementById('continueBtn');
-            continueBtn.style.opacity = '1';
-            continueBtn.style.pointerEvents = 'auto';
-        }
-
-        function demoMode() {
-            currentNetwork = 'CoWorking_Space';
-            currentNetworkName = 'CoWorking Space Premium';
-            hasPaymentSetup = true;
-            userProfile = {
-                name: 'Usuário Demo',
-                profession: 'Profissional',
-                bio: 'Perfil de demonstração do app',
-                interests: ['Tecnologia', 'Design']
-            };
-            showScreen('homeScreen');
-            loadUsers();
-        }
-
-        function toggleInterest(element) {
-            element.classList.toggle('selected');
-        }
-
-        function toggleSetting(element) {
-            element.classList.toggle('active');
-        }
-
-        function completeSetup() {
-            userProfile = {
-                name: document.getElementById('userName').value || 'Usuário',
-                profession: document.getElementById('userProfession').value || 'Profissional',
-                bio: document.getElementById('userBio').value || 'Olá! Estou usando o WiFi Presence.',
-                whatsapp: document.getElementById('userWhatsapp').value || '',
-                instagram: document.getElementById('userInstagram').value || '',
-                interests: Array.from(document.querySelectorAll('.interest-tag.selected')).map(tag => tag.textContent.trim())
-            };
-
-            localStorage.setItem('wifiPresenceProfile', JSON.stringify(userProfile));
-            localStorage.setItem('wifiPresenceNetwork', currentNetwork);
-            localStorage.setItem('wifiPresenceNetworkName', currentNetworkName);
-            
-            showScreen('homeScreen');
-            loadUsers();
-        }
-
-        function loadUsers() {
-            const usersList = document.getElementById('usersList');
-            const welcomeName = document.getElementById('welcomeName');
-            const currentNetworkEl = document.getElementById('currentNetwork');
-            const onlineCount = document.getElementById('onlineCount');
-            
-            // Update header
-            welcomeName.textContent = `Olá, ${userProfile.name}!${isPremium ? ' 👑' : ''}`;
-            currentNetworkEl.textContent = `Conectado em: ${currentNetworkName}`;
-            
-            // Hide premium banner if user is premium
-            const premiumBanner = document.querySelector('.premium-banner');
-            if (isPremium && premiumBanner) {
-                premiumBanner.style.display = 'none';
-            }
-            
-            // Get users for current network
-            const users = networkUsers[currentNetwork] || [];
-            onlineCount.textContent = `${users.length} pessoas`;
-            
-            // Show proximity payment features based on network
-            showProximityFeatures();
-            
-            // Clear users list
-            usersList.innerHTML = '';
-            
-            // Populate users
-            users.forEach(user => {
-                const userCard = createUserCard(user);
-                usersList.appendChild(userCard);
-            });
-        }
-
-        function showProximityFeatures() {
-            const proximityPayment = document.getElementById('proximityPayment');
-            const splitBillAdvanced = document.getElementById('splitBillAdvanced');
-            const autoDetection = document.getElementById('autoDetection');
-            const paymentSetup = document.getElementById('paymentSetup');
-            const paymentHistory = document.getElementById('paymentHistory');
-            const consolidatedOrders = document.getElementById('consolidatedOrders');
-
-            // Hide all proximity features first
-            proximityPayment.style.display = 'none';
-            splitBillAdvanced.style.display = 'none';
-            autoDetection.style.display = 'none';
-            paymentSetup.style.display = 'none';
-            paymentHistory.style.display = 'none';
-            consolidatedOrders.style.display = 'none';
-
-            // Show features based on network and setup status
-            if (currentNetwork === 'CafeConnect_5G') {
-                if (!hasPaymentSetup) {
-                    paymentSetup.style.display = 'block';
-                } else {
-                    consolidatedOrders.style.display = 'block';
-                    // Simulate consolidated payment after 4 seconds
-                    setTimeout(simulateConsolidatedPayment, 4000);
-                }
-            } else if (currentNetwork === 'CoWorking_Space' && hasPaymentSetup) {
-                // Show auto detection first, then advanced split
-                autoDetection.style.display = 'block';
-                setTimeout(() => {
-                    autoDetection.style.display = 'none';
-                    splitBillAdvanced.style.display = 'block';
-                }, 3000);
-            } else if (currentNetwork === 'TechHub_Guest' && hasPaymentSetup) {
-                paymentHistory.style.display = 'block';
-            }
-        }
-
-        function simulateConsolidatedPayment() {
-            const consolidatedOrders = document.getElementById('consolidatedOrders');
-            if (consolidatedOrders.style.display === 'block') {
-                consolidatedOrders.style.animation = 'pulse 1s ease-in-out 3';
-                
-                if (navigator.vibrate) {
-                    navigator.vibrate([100, 50, 100]);
-                }
-            }
-        }
-
-        function createUserCard(user) {
-            const card = document.createElement('div');
-            card.className = 'user-card';
-            
-            const avatar = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
-            
-            card.innerHTML = `
-                <div class="user-header">
-                    <div class="user-avatar">${avatar}</div>
-                    <div class="user-details">
-                        <h3>${user.name}</h3>
-                        <p>${user.profession}</p>
-                    </div>
-                    <div class="match-percentage">${user.match}% match</div>
-                </div>
-                
-                <div class="user-bio">${user.bio}</div>
-                
-                <div class="user-interests">
-                    ${user.interests.map(interest => `<span class="interest-badge">${interest}</span>`).join('')}
-                </div>
-                
-                <div class="social-links">
-                    ${user.whatsapp ? `
-                        <button class="social-btn whatsapp-btn" onclick="openWhatsApp('${user.whatsapp}')">
-                            <span style="font-size: 16px;">📱</span> WhatsApp
-                        </button>
-                    ` : ''}
-                    ${user.instagram ? `
-                        <button class="social-btn instagram-btn" onclick="openInstagram('${user.instagram}')">
-                            <span style="font-size: 16px;">📷</span> Instagram
-                        </button>
-                    ` : ''}
-                </div>
-            `;
-            
-            return card;
-        }
-
-        function switchDivision(mode) {
-            const equalBtn = document.querySelector('.division-btn:first-child');
-            const customBtn = document.querySelector('.division-btn:last-child');
-            const equalDiv = document.getElementById('equalDivision');
-            const customDiv = document.getElementById('customDivision');
-            const confirmBtn = document.getElementById('confirmSplitBtn');
-
-            divisionMode = mode;
-
-            if (mode === 'equal') {
-                equalBtn.classList.add('active');
-                customBtn.classList.remove('active');
-                equalDiv.style.display = 'block';
-                customDiv.style.display = 'none';
-                confirmBtn.textContent = 'Confirmar Minha Parte (R$ 100,00)';
-            } else {
-                customBtn.classList.add('active');
-                equalBtn.classList.remove('active');
-                customDiv.style.display = 'block';
-                equalDiv.style.display = 'none';
-                updateCustomTotals();
-            }
-        }
-
-        function assignItem(element, itemName, price) {
-            const assignees = ['you', 'ana', 'carlos', 'marina'];
-            const assigneeNames = ['Você', 'Ana', 'Carlos', 'Marina'];
-            
-            const assignee = assignees[assigneeIndex % assignees.length];
-            const assigneeName = assigneeNames[assigneeIndex % assigneeNames.length];
-            
-            element.classList.add('assigned');
-            
-            const existingTag = element.querySelector('.item-assignee');
-            if (existingTag) {
-                existingTag.remove();
-                const previousAssignee = existingTag.dataset.assignee;
-                if (customBillAssignments[previousAssignee]) {
-                    customBillAssignments[previousAssignee].total -= price;
-                    customBillAssignments[previousAssignee].items = customBillAssignments[previousAssignee].items.filter(item => item.name !== itemName);
-                }
-            }
-            
-            const assigneeTag = document.createElement('span');
-            assigneeTag.className = 'item-assignee';
-            assigneeTag.textContent = assigneeName;
-            assigneeTag.dataset.assignee = assignee;
-            element.querySelector('.item-price').appendChild(assigneeTag);
-            
-            customBillAssignments[assignee].items.push({ name: itemName, price: price });
-            customBillAssignments[assignee].total += price;
-            
-            assigneeIndex++;
-            updateCustomTotals();
-        }
-
-        function updateCustomTotals() {
-            document.getElementById('yourTotal').textContent = `R$ ${customBillAssignments.you.total.toFixed(2)}`;
-            document.getElementById('anaTotal').textContent = `R$ ${customBillAssignments.ana.total.toFixed(2)}`;
-            document.getElementById('carlosTotal').textContent = `R$ ${customBillAssignments.carlos.total.toFixed(2)}`;
-            document.getElementById('marinaTotal').textContent = `R$ ${customBillAssignments.marina.total.toFixed(2)}`;
-            
-            const confirmBtn = document.getElementById('confirmSplitBtn');
-            confirmBtn.textContent = `Confirmar Minha Parte (R$ ${customBillAssignments.you.total.toFixed(2)})`;
-        }
-
-        function confirmAdvancedSplit() {
-            const confirmBtn = document.getElementById('confirmSplitBtn');
-            const yourTotal = customBillAssignments.you.total;
-            
-            confirmBtn.textContent = 'Processando...';
-            confirmBtn.style.opacity = '0.7';
-            
-            setTimeout(() => {
-                if (divisionMode === 'equal') {
-                    alert('✅ Conta dividida igualmente!\n\nR$ 100,00 debitado do seu cartão.\nCashback: R$ 2,00\nTodos os participantes foram notificados.');
-                } else {
-                    const yourItems = customBillAssignments.you.items.map(item => item.name).join(', ');
-                    alert(`✅ Sua parte foi paga!\n\nItens: ${yourItems}\nValor: R$ ${yourTotal.toFixed(2)}\nCashback: R$ ${(yourTotal * 0.02).toFixed(2)}\n\nOutros participantes foram notificados de suas partes.`);
-                }
-                
-                confirmBtn.textContent = '✅ Pago - Aguardando outros';
-                confirmBtn.style.background = '#00b894';
-                confirmBtn.disabled = true;
-            }, 2500);
-        }
-
-        function payConsolidatedOrder() {
-            const payBtn = event.target;
-            payBtn.textContent = 'Processando Pagamento...';
-            payBtn.style.opacity = '0.7';
-            
-            setTimeout(() => {
-                alert('🎉 Pagamento Consolidado Realizado!\n\n' +
-                      '☕ Total da Sessão: R$ 69,40\n' +
-                      '🏆 Cashback Duplo: R$ 2,78 (4%)\n' +
-                      '⭐ +50 pontos de fidelidade\n' +
-                      '📧 Comprovante enviado por email\n\n' +
-                      'Obrigado pela permanência longa!');
-                
-                document.getElementById('consolidatedOrders').style.display = 'none';
-                document.getElementById('paymentHistory').style.display = 'block';
-                
-                payBtn.textContent = '💳 Pagar Tudo de Uma Vez (R$ 69,40)';
-                payBtn.style.opacity = '1';
-            }, 3000);
-        }
-
-        function setupProximityPayment() {
-            const cardNumber = document.getElementById('cardNumber').value;
-            const cardName = document.getElementById('cardName').value;
-            
-            if (!cardNumber || !cardName) {
-                alert('Por favor, preencha todos os campos do cartão');
-                return;
-            }
-            
-            const setupBtn = event.target;
-            setupBtn.textContent = 'Configurando...';
-            setupBtn.style.opacity = '0.7';
-            
-            setTimeout(() => {
-                hasPaymentSetup = true;
-                localStorage.setItem('wifiPresencePaymentSetup', 'true');
-                
-                alert('✅ Pagamento por Proximidade configurado com sucesso!\n\nAgora você pode pagar automaticamente em estabelecimentos parceiros.');
-                
-                setupBtn.textContent = 'Configurar Pagamento';
-                setupBtn.style.opacity = '1';
-                
-                loadUsers();
-            }, 2000);
-        }
-
-        function approvePayment() {
-            const proximityPayment = document.getElementById('proximityPayment');
-            const approveBtn = document.querySelector('.btn-approve');
-            
-            approveBtn.textContent = '🔒 Autenticando...';
-            approveBtn.style.opacity = '0.7';
-            
-            setTimeout(() => {
-                alert('✅ Pagamento aprovado!\n\n' + 
-                      'Café Connect: R$ 18,50\n' +
-                      'Comprovante enviado por email.');
-                
-                proximityPayment.style.display = 'none';
-                proximityPayment.classList.remove('requesting');
-                
-                const paymentHistory = document.getElementById('paymentHistory');
-                paymentHistory.style.display = 'block';
-                
-                approveBtn.textContent = '🔒 Pagar com Biometria';
-                approveBtn.style.opacity = '1';
-            }, 2000);
-        }
-
-        function declinePayment() {
-            const proximityPayment = document.getElementById('proximityPayment');
-            proximityPayment.style.display = 'none';
-            proximityPayment.classList.remove('requesting');
-            
-            const paymentHistory = document.getElementById('paymentHistory');
-            paymentHistory.style.display = 'block';
-        }
-
-        function openWhatsApp(phone) {
-            const message = encodeURIComponent('Olá! Vi seu perfil no WiFi Presence. Gostaria de conversar!');
-            window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${message}`, '_blank');
-        }
-
-        function openInstagram(username) {
-            const cleanUsername = username.replace('@', '');
-            window.open(`https://instagram.com/${cleanUsername}`, '_blank');
-        }
-
-        function openSettings() {
-            document.getElementById('settingsModal').classList.add('active');
-        }
-
-        function closeSettings() {
-            document.getElementById('settingsModal').classList.remove('active');
-        }
-
-        function logout() {
-            localStorage.clear();
-            currentNetwork = '';
-            currentNetworkName = '';
-            userProfile = {};
-            hasPaymentSetup = false;
-            isPremium = false;
-            
-            customBillAssignments = {
-                'you': { name: 'Você', items: [], total: 0 },
-                'ana': { name: 'Ana Silva', items: [], total: 0 },
-                'carlos': { name: 'Carlos Santos', items: [], total: 0 },
-                'marina': { name: 'Marina Costa', items: [], total: 0 }
-            };
-            
-            showScreen('loginScreen');
-            closeSettings();
-        }
-
-        // Load saved data on page load
-        window.addEventListener('load', function() {
-            const savedProfile = localStorage.getItem('wifiPresenceProfile');
-            const savedNetwork = localStorage.getItem('wifiPresenceNetwork');
-            const savedNetworkName = localStorage.getItem('wifiPresenceNetworkName');
-            const savedPremium = localStorage.getItem('wifiPresencePremium');
-            const savedPaymentSetup = localStorage.getItem('wifiPresencePaymentSetup');
-            
-            if (savedPremium) {
-                isPremium = true;
-            }
-            
-            if (savedPaymentSetup) {
-                hasPaymentSetup = true;
-            }
-            
-            if (savedProfile && savedNetwork) {
-                userProfile = JSON.parse(savedProfile);
-                currentNetwork = savedNetwork;
-                currentNetworkName = savedNetworkName;
-                showScreen('homeScreen');
-                loadUsers();
-            }
-        });
-    </script>
-</body>
-</html><!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -1114,6 +119,10 @@
             cursor: pointer;
             transition: all 0.3s ease;
             margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
         }
 
         .btn-primary {
@@ -1132,8 +141,68 @@
             border: 2px solid #e9ecef;
         }
 
-        .btn-secondary:hover {
+        .btn-google {
+            background: white;
+            color: #333;
+            border: 2px solid #e9ecef;
+        }
+
+        .btn-apple {
+            background: #000;
+            color: white;
+        }
+
+        .divider {
+            display: flex;
+            align-items: center;
+            margin: 30px 0;
+            color: #999;
+            font-size: 14px;
+        }
+
+        .divider::before,
+        .divider::after {
+            content: '';
+            flex: 1;
+            height: 1px;
             background: #e9ecef;
+        }
+
+        .divider span {
+            margin: 0 15px;
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px;
+            border: 2px solid #e9ecef;
+            border-radius: 12px;
+            font-size: 16px;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .form-textarea {
+            height: 80px;
+            resize: vertical;
         }
 
         /* WiFi Selection */
@@ -1238,42 +307,7 @@
             font-size: 18px;
         }
 
-        /* Profile Setup */
-        .profile-form {
-            padding: 30px;
-        }
-
-        .form-group {
-            margin-bottom: 20px;
-        }
-
-        .form-label {
-            display: block;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 8px;
-            font-size: 14px;
-        }
-
-        .form-input {
-            width: 100%;
-            padding: 14px;
-            border: 2px solid #e9ecef;
-            border-radius: 12px;
-            font-size: 16px;
-            transition: border-color 0.3s ease;
-        }
-
-        .form-input:focus {
-            outline: none;
-            border-color: #667eea;
-        }
-
-        .form-textarea {
-            height: 80px;
-            resize: vertical;
-        }
-
+        /* Interests */
         .interests-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -1282,20 +316,25 @@
         }
 
         .interest-tag {
-            padding: 8px 12px;
+            padding: 12px;
             background: #f8f9fa;
             border: 2px solid #e9ecef;
-            border-radius: 20px;
+            border-radius: 12px;
             font-size: 14px;
             cursor: pointer;
             text-align: center;
             transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
         }
 
         .interest-tag.selected {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             border-color: #667eea;
+            transform: translateY(-2px);
         }
 
         /* Home Screen */
@@ -1338,31 +377,19 @@
             text-align: center;
         }
 
-        /* Payment by Proximity */
+        /* Payment Features */
         .payment-proximity {
             background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
             color: white;
             padding: 20px;
             margin: 0 20px 20px;
             border-radius: 16px;
-            position: relative;
             animation: pulse 2s infinite;
-        }
-
-        .payment-proximity.requesting {
-            background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-            animation: shake 0.5s ease-in-out;
         }
 
         @keyframes pulse {
             0%, 100% { box-shadow: 0 0 0 0 rgba(0, 212, 170, 0.4); }
             50% { box-shadow: 0 0 0 10px rgba(0, 212, 170, 0); }
-        }
-
-        @keyframes shake {
-            0%, 100% { transform: translateX(0); }
-            25% { transform: translateX(-5px); }
-            75% { transform: translateX(5px); }
         }
 
         .proximity-header {
@@ -1390,10 +417,8 @@
             margin-top: 15px;
         }
 
-        .btn-approve {
+        .btn-approve, .btn-decline {
             flex: 1;
-            background: #00b894;
-            color: white;
             border: none;
             padding: 12px;
             border-radius: 10px;
@@ -1401,17 +426,18 @@
             cursor: pointer;
         }
 
+        .btn-approve {
+            background: #00b894;
+            color: white;
+        }
+
         .btn-decline {
-            flex: 1;
             background: rgba(255,255,255,0.2);
             color: white;
             border: 2px solid rgba(255,255,255,0.3);
-            padding: 12px;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
         }
 
+        /* Users List */
         .users-list {
             padding: 0 20px 20px;
         }
@@ -1518,319 +544,9 @@
             color: white;
         }
 
-        .whatsapp-btn:hover {
-            background: #22c25d;
-            transform: translateY(-1px);
-        }
-
         .instagram-btn {
             background: linear-gradient(45deg, #f09433 0%,#e6683c 25%,#dc2743 50%,#cc2366 75%,#bc1888 100%);
             color: white;
-        }
-
-        .instagram-btn:hover {
-            transform: translateY(-1px);
-        }
-
-        /* Advanced Split Bill */
-        .auto-detection {
-            background: linear-gradient(135deg, #00d4aa 0%, #00b894 100%);
-            color: white;
-            padding: 15px 20px;
-            margin: 0 20px 15px;
-            border-radius: 12px;
-            animation: pulse 2s infinite;
-        }
-
-        .detected-users {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-            overflow-x: auto;
-            padding: 5px 0;
-        }
-
-        .detected-user {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            min-width: 60px;
-            padding: 10px;
-            background: rgba(255,255,255,0.1);
-            border-radius: 10px;
-        }
-
-        .split-bill {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .split-users {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .split-user {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px;
-            background: #f8f9fa;
-            border-radius: 10px;
-        }
-
-        .split-amount {
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .division-options {
-            display: flex;
-            gap: 10px;
-            margin: 15px 0;
-        }
-
-        .division-btn {
-            flex: 1;
-            padding: 10px;
-            border: 2px solid #e9ecef;
-            background: white;
-            border-radius: 10px;
-            cursor: pointer;
-            text-align: center;
-            font-size: 14px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-        }
-
-        .division-btn.active {
-            border-color: #667eea;
-            background: rgba(102, 126, 234, 0.1);
-            color: #667eea;
-        }
-
-        .bill-items {
-            background: white;
-            border-radius: 12px;
-            margin: 15px 0;
-            overflow: hidden;
-        }
-
-        .bill-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 15px;
-            border-bottom: 1px solid #e9ecef;
-            cursor: pointer;
-            transition: background 0.3s ease;
-        }
-
-        .bill-item:last-child {
-            border-bottom: none;
-        }
-
-        .bill-item:hover {
-            background: #f8f9fa;
-        }
-
-        .bill-item.assigned {
-            background: rgba(102, 126, 234, 0.1);
-            border-left: 4px solid #667eea;
-        }
-
-        .item-info {
-            display: flex;
-            align-items: center;
-            flex: 1;
-        }
-
-        .item-icon {
-            width: 32px;
-            height: 32px;
-            border-radius: 6px;
-            background: #f8f9fa;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-            font-size: 16px;
-        }
-
-        .item-details h4 {
-            font-size: 14px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 2px;
-        }
-
-        .item-details p {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .item-price {
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        .item-assignee {
-            font-size: 11px;
-            background: #667eea;
-            color: white;
-            padding: 2px 8px;
-            border-radius: 10px;
-            margin-left: 8px;
-        }
-
-        .cashback-info {
-            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
-            color: #333;
-            padding: 12px 15px;
-            border-radius: 10px;
-            margin: 15px 0;
-            text-align: center;
-        }
-
-        .consolidated-orders {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .order-session {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 12px;
-            margin: 10px 0;
-            position: relative;
-        }
-
-        .order-time {
-            font-size: 12px;
-            color: #666;
-            margin-bottom: 8px;
-        }
-
-        .order-items {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 8px;
-            margin-bottom: 10px;
-        }
-
-        .order-tag {
-            background: white;
-            padding: 4px 10px;
-            border-radius: 15px;
-            font-size: 12px;
-            color: #333;
-            border: 1px solid #e9ecef;
-        }
-
-        .order-total {
-            font-weight: 600;
-            color: #667eea;
-            text-align: right;
-        }
-
-        .payment-setup {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 0 20px 20px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .card-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-
-        .card-input {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid #e9ecef;
-            border-radius: 8px;
-            font-size: 16px;
-        }
-
-        .card-row {
-            display: flex;
-            gap: 10px;
-        }
-
-        .proximity-history {
-            background: white;
-            border-radius: 16px;
-            padding: 20px;
-            margin: 0 20px 15px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-        }
-
-        .history-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 15px 0;
-            border-bottom: 1px solid #e9ecef;
-        }
-
-        .history-item:last-child {
-            border-bottom: none;
-        }
-
-        .history-info h4 {
-            font-size: 16px;
-            font-weight: 600;
-            color: #333;
-            margin-bottom: 4px;
-        }
-
-        .history-info p {
-            font-size: 14px;
-            color: #666;
-        }
-
-        .history-amount {
-            font-size: 16px;
-            font-weight: 600;
-            color: #667eea;
-        }
-
-        /* Premium Features */
-        .premium-banner {
-            background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%);
-            color: #333;
-            padding: 15px 20px;
-            margin: 0 20px 20px;
-            border-radius: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: transform 0.3s ease;
-        }
-
-        .premium-banner:hover {
-            transform: translateY(-2px);
-        }
-
-        .premium-banner h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
-        }
-
-        .premium-banner p {
-            font-size: 14px;
-            opacity: 0.8;
         }
 
         /* Settings Modal */
@@ -1971,11 +687,76 @@
                 <h1 class="login-title">WiFi Presence</h1>
                 <p class="login-subtitle">Conecte-se com pessoas na mesma rede WiFi e expanda seu networking</p>
                 
-                <button class="btn btn-primary" onclick="showScreen('wifiScreen')">
-                    Começar Agora
+                <!-- Social Login Buttons -->
+                <button class="btn btn-google" onclick="socialLogin('google')">
+                    <span style="font-size: 18px;">🔍</span>
+                    Continuar com Google
                 </button>
+                
+                <button class="btn btn-apple" onclick="socialLogin('apple')">
+                    <span style="font-size: 18px;">🍎</span>
+                    Continuar com Apple
+                </button>
+                
+                <div class="divider">
+                    <span>ou</span>
+                </div>
+                
+                <!-- Email/Password Form -->
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="loginEmail" placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-input" id="loginPassword" placeholder="••••••••">
+                </div>
+                
+                <button class="btn btn-primary" onclick="emailLogin()">
+                    Entrar
+                </button>
+                
+                <button class="btn btn-secondary" onclick="showScreen('signupScreen')">
+                    Criar Conta
+                </button>
+                
+                <div class="divider">
+                    <span>Para investidores</span>
+                </div>
+                
                 <button class="btn btn-secondary" onclick="demoMode()">
-                    Ver Demo
+                    Ver Demo Completa
+                </button>
+            </div>
+        </div>
+
+        <!-- Signup Screen -->
+        <div class="screen" id="signupScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('loginScreen')">←</button>
+                <h1>Criar Conta</h1>
+                <p>Junte-se à revolução do networking</p>
+            </div>
+            
+            <div class="login-content">
+                <div class="form-group">
+                    <label class="form-label">Nome Completo</label>
+                    <input type="text" class="form-input" id="signupName" placeholder="Seu nome completo">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Email</label>
+                    <input type="email" class="form-input" id="signupEmail" placeholder="seu@email.com">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label">Senha</label>
+                    <input type="password" class="form-input" id="signupPassword" placeholder="Mínimo 6 caracteres">
+                </div>
+                
+                <button class="btn btn-primary" onclick="createAccount()">
+                    Criar Conta
                 </button>
             </div>
         </div>
@@ -2046,4 +827,651 @@
             </div>
 
             <div style="padding: 20px;">
-                <button class="btn btn-primary" onclick="showScreen('permissionScreen')" i
+                <button class="btn btn-primary" onclick="showScreen('permissionScreen')" id="continueBtn" style="opacity: 0.5; pointer-events: none;">
+                    Continuar
+                </button>
+            </div>
+        </div>
+
+        <!-- Permission Screen -->
+        <div class="screen" id="permissionScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('wifiScreen')">←</button>
+                <h1>Permissões</h1>
+                <p>Para uma melhor experiência</p>
+            </div>
+            
+            <div class="permission-content">
+                <div class="permission-icon">🔒</div>
+                <h2>Precisamos de algumas permissões</h2>
+                <p style="color: #666; margin-bottom: 30px;">Essas permissões nos ajudam a conectar você com pessoas próximas de forma segura</p>
+                
+                <div class="permission-list">
+                    <div class="permission-item">
+                        <div class="permission-item-icon">📍</div>
+                        <div>
+                            <h3>Localização</h3>
+                            <p>Para detectar usuários na mesma rede WiFi</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">📶</div>
+                        <div>
+                            <h3>Acesso à Rede</h3>
+                            <p>Para verificar conectividade e qualidade</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">🔔</div>
+                        <div>
+                            <h3>Notificações</h3>
+                            <p>Para avisar sobre novos matches e mensagens</p>
+                        </div>
+                    </div>
+
+                    <div class="permission-item">
+                        <div class="permission-item-icon">🏪</div>
+                        <div>
+                            <h3>Notificações do Estabelecimento</h3>
+                            <p>Receber promoções, novidades e ofertas especiais</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="showScreen('profileScreen')">
+                    Permitir e Continuar
+                </button>
+                <button class="btn btn-secondary" onclick="showScreen('profileScreen')">
+                    Pular por Agora
+                </button>
+            </div>
+        </div>
+
+        <!-- Profile Setup Screen -->
+        <div class="screen" id="profileScreen">
+            <div class="header">
+                <button class="back-btn" onclick="showScreen('permissionScreen')">←</button>
+                <h1>Seu Perfil</h1>
+                <p>Conte um pouco sobre você</p>
+            </div>
+            
+            <div style="padding: 30px;">
+                <div class="form-group">
+                    <label class="form-label">Nome</label>
+                    <input type="text" class="form-input" id="userName" placeholder="Seu nome completo">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Profissão</label>
+                    <input type="text" class="form-input" id="userProfession" placeholder="Ex: Desenvolvedor, Designer, etc.">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Bio</label>
+                    <textarea class="form-input form-textarea" id="userBio" placeholder="Conte um pouco sobre você..."></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">WhatsApp (opcional)</label>
+                    <input type="tel" class="form-input" id="userWhatsapp" placeholder="(11) 99999-9999">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Instagram (opcional)</label>
+                    <input type="text" class="form-input" id="userInstagram" placeholder="@seuinstagram">
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">Seus Interesses</label>
+                    <div class="interests-grid">
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>💻</span>
+                            <span>Tecnologia</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>🎨</span>
+                            <span>Design</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>📈</span>
+                            <span>Negócios</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>🎵</span>
+                            <span>Música</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>✈️</span>
+                            <span>Viagens</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>📚</span>
+                            <span>Educação</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>🏃</span>
+                            <span>Esportes</span>
+                        </div>
+                        <div class="interest-tag" onclick="toggleInterest(this)">
+                            <span>🍕</span>
+                            <span>Gastronomia</span>
+                        </div>
+                    </div>
+                </div>
+
+                <button class="btn btn-primary" onclick="completeSetup()">
+                    Finalizar Perfil
+                </button>
+            </div>
+        </div>
+
+        <!-- Home Screen -->
+        <div class="screen" id="homeScreen">
+            <div class="home-header">
+                <div class="user-info">
+                    <h2 id="welcomeName">Olá, Usuário!</h2>
+                    <p id="currentNetwork">Conectado em: WiFi</p>
+                </div>
+                <button class="settings-btn" onclick="openSettings()">⚙️</button>
+            </div>
+
+            <div class="online-count">
+                <strong id="onlineCount">5 pessoas</strong> online nesta rede
+            </div>
+
+            <!-- Payment by Proximity -->
+            <div class="payment-proximity" id="proximityPayment" style="display: none;">
+                <div class="proximity-header">
+                    <div>
+                        <div style="font-size: 18px; font-weight: 600;">💳 Pagamento Solicitado</div>
+                        <div style="font-size: 14px; opacity: 0.9;" id="merchantName">Restaurante Famiglia</div>
+                    </div>
+                    <div class="proximity-amount" id="paymentAmount">R$ 85,00</div>
+                </div>
+                
+                <div class="proximity-details">
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Mesa:</span>
+                        <span id="tableLocation">Mesa 7</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; margin-bottom: 8px;">
+                        <span>Cartão:</span>
+                        <span>•••• 4242</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between;">
+                        <span>Itens:</span>
+                        <span>Pizza, Refrigerante, Sobremesa</span>
+                    </div>
+                </div>
+
+                <div class="proximity-actions">
+                    <button class="btn-approve" onclick="approvePayment()">
+                        🔒 Pagar com Biometria
+                    </button>
+                    <button class="btn-decline" onclick="showSplitBill()">
+                        🍽️ Dividir Conta
+                    </button>
+                </div>
+            </div>
+
+            <!-- Split Bill -->
+            <div style="background: white; border-radius: 16px; padding: 20px; margin: 0 20px 20px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); display: none;" id="splitBill">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                    <h3>🍽️ Divisão Automática</h3>
+                    <div style="font-size: 20px; font-weight: 700; color: #667eea;">R$ 340,00</div>
+                </div>
+                
+                <p style="color: #666; margin-bottom: 15px;">4 pessoas detectadas na mesa via WiFi</p>
+                
+                <div style="display: flex; flex-direction: column; gap: 10px; margin: 15px 0;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px;">
+                        <span>Você</span>
+                        <span style="font-weight: 600; color: #667eea;">R$ 85,00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px;">
+                        <span>Ana Silva (UX Designer)</span>
+                        <span style="font-weight: 600; color: #667eea;">R$ 85,00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px;">
+                        <span>Carlos Santos (Dev)</span>
+                        <span style="font-weight: 600; color: #667eea;">R$ 85,00</span>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; align-items: center; padding: 12px; background: #f8f9fa; border-radius: 10px;">
+                        <span>Marina Costa (Fotógrafa)</span>
+                        <span style="font-weight: 600; color: #667eea;">R$ 85,00</span>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #ffd700 0%, #ffb300 100%); color: #333; padding: 12px 15px; border-radius: 10px; margin: 15px 0; text-align: center;">
+                    <div style="font-size: 14px; font-weight: 600;">🎁 Cashback Automático</div>
+                    <div style="font-size: 12px; margin-top: 4px;">Ganhe 2% de volta (R$ 1,70) + Pontos Stone</div>
+                </div>
+
+                <button class="btn btn-primary" onclick="confirmSplit()">
+                    Confirmar Minha Parte (R$ 85,00)
+                </button>
+            </div>
+
+            <div class="users-list" id="usersList">
+                <!-- Users will be populated by JavaScript -->
+            </div>
+        </div>
+
+        <!-- Settings Modal -->
+        <div class="modal" id="settingsModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title">Configurações</h2>
+                    <button class="close-btn" onclick="closeSettings()">×</button>
+                </div>
+                
+                <div class="settings-list">
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Visibilidade</h3>
+                            <p>Aparecer para outros usuários</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Notificações</h3>
+                            <p>Receber alertas de novos matches</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Promoções do Estabelecimento</h3>
+                            <p>Receber ofertas e novidades do local</p>
+                        </div>
+                        <div class="toggle active" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Auto-connect</h3>
+                            <p>Conectar automaticamente em redes conhecidas</p>
+                        </div>
+                        <div class="toggle" onclick="toggleSetting(this)"></div>
+                    </div>
+
+                    <div class="setting-item">
+                        <div class="setting-info">
+                            <h3>Modo Privado</h3>
+                            <p>Ocultar informações pessoais</p>
+                        </div>
+                        <div class="toggle" onclick="toggleSetting(this)"></div>
+                    </div>
+                </div>
+
+                <div style="padding: 20px;">
+                    <button class="btn btn-secondary" onclick="logout()">
+                        Sair do App
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // App State
+        let currentNetwork = '';
+        let currentNetworkName = '';
+        let userProfile = {};
+        let isLoggedIn = false;
+
+        // Mock users data
+        const networkUsers = {
+            'CafeConnect_5G': [
+                {
+                    name: 'Ana Silva',
+                    profession: 'UX Designer',
+                    bio: 'Apaixonada por criar experiências digitais incríveis. Sempre em busca de inspiração!',
+                    interests: ['Design', 'Tecnologia', 'Música'],
+                    match: 85,
+                    whatsapp: '+5511999999999',
+                    instagram: '@anasilva.design'
+                },
+                {
+                    name: 'Carlos Santos',
+                    profession: 'Desenvolvedor Full-Stack',
+                    bio: 'Transformando ideias em código. Café e JavaScript são meus combustíveis.',
+                    interests: ['Tecnologia', 'Educação', 'Esportes'],
+                    match: 72,
+                    whatsapp: '+5511888888888',
+                    instagram: '@carlos.dev'
+                }
+            ],
+            'CoWorking_Space': [
+                {
+                    name: 'Rafael Lima',
+                    profession: 'Product Manager',
+                    bio: 'Estratégia e inovação são minha paixão. Conectando pessoas e ideias.',
+                    interests: ['Negócios', 'Tecnologia', 'Educação'],
+                    match: 92,
+                    whatsapp: '+5511666666666',
+                    instagram: '@rafael.pm'
+                },
+                {
+                    name: 'Juliana Rocha',
+                    profession: 'Data Scientist',
+                    bio: 'Encontrando insights valiosos nos dados. Machine Learning é meu hobby.',
+                    interests: ['Tecnologia', 'Educação', 'Música'],
+                    match: 78,
+                    whatsapp: '+5511555555555',
+                    instagram: '@ju.data'
+                }
+            ],
+            'UniversityNet': [
+                {
+                    name: 'Lucas Almeida',
+                    profession: 'Estudante de Engenharia',
+                    bio: 'Futuro engenheiro apaixonado por inovação e sustentabilidade.',
+                    interests: ['Tecnologia', 'Educação', 'Esportes'],
+                    match: 71,
+                    whatsapp: '+5511222222222',
+                    instagram: '@lucas.eng'
+                }
+            ]
+        };
+
+        // Screen Navigation
+        function showScreen(screenId) {
+            document.querySelectorAll('.screen').forEach(screen => {
+                screen.classList.remove('active');
+            });
+            document.getElementById(screenId).classList.add('active');
+        }
+
+        // Authentication Functions
+        function socialLogin(provider) {
+            const btn = event.target;
+            const originalText = btn.innerHTML;
+            
+            btn.innerHTML = `<span>⏳</span> Conectando...`;
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                alert(`✅ Login com ${provider === 'google' ? 'Google' : 'Apple'} realizado com sucesso!`);
+                
+                userProfile = {
+                    name: provider === 'google' ? 'João Google' : 'João Apple',
+                    email: `joao@${provider}.com`,
+                    loginMethod: provider
+                };
+                
+                isLoggedIn = true;
+                btn.innerHTML = originalText;
+                btn.style.opacity = '1';
+                showScreen('wifiScreen');
+            }, 2000);
+        }
+
+        function emailLogin() {
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            if (!email || !password) {
+                alert('Por favor, preencha email e senha');
+                return;
+            }
+            
+            const btn = event.target;
+            btn.textContent = 'Entrando...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                userProfile = {
+                    name: 'João Silva',
+                    email: email,
+                    loginMethod: 'email'
+                };
+                
+                isLoggedIn = true;
+                btn.textContent = 'Entrar';
+                btn.style.opacity = '1';
+                showScreen('wifiScreen');
+            }, 1500);
+        }
+
+        function createAccount() {
+            const name = document.getElementById('signupName').value;
+            const email = document.getElementById('signupEmail').value;
+            const password = document.getElementById('signupPassword').value;
+            
+            if (!name || !email || !password) {
+                alert('Por favor, preencha todos os campos');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('A senha deve ter pelo menos 6 caracteres');
+                return;
+            }
+            
+            const btn = event.target;
+            btn.textContent = 'Criando conta...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                userProfile = {
+                    name: name,
+                    email: email,
+                    loginMethod: 'signup'
+                };
+                
+                isLoggedIn = true;
+                btn.textContent = 'Criar Conta';
+                btn.style.opacity = '1';
+                showScreen('wifiScreen');
+            }, 1500);
+        }
+
+        function demoMode() {
+            userProfile = {
+                name: 'Demo Investor',
+                email: 'demo@investor.com',
+                profession: 'Investidor',
+                bio: 'Explorando oportunidades de investimento em startups revolucionárias.',
+                interests: ['Negócios', 'Tecnologia']
+            };
+            
+            currentNetwork = 'CoWorking_Space';
+            currentNetworkName = 'CoWorking Space Premium';
+            isLoggedIn = true;
+            
+            showScreen('homeScreen');
+            loadUsers();
+            
+            // Show payment demo after 3 seconds
+            setTimeout(() => {
+                document.getElementById('proximityPayment').style.display = 'block';
+            }, 3000);
+        }
+
+        // WiFi Selection
+        function selectWifi(networkId, networkName) {
+            document.querySelectorAll('.wifi-item').forEach(item => {
+                item.classList.remove('selected');
+            });
+            
+            event.target.closest('.wifi-item').classList.add('selected');
+            currentNetwork = networkId;
+            currentNetworkName = networkName;
+            
+            const continueBtn = document.getElementById('continueBtn');
+            continueBtn.style.opacity = '1';
+            continueBtn.style.pointerEvents = 'auto';
+        }
+
+        // Profile Setup
+        function toggleInterest(element) {
+            element.classList.toggle('selected');
+        }
+
+        function completeSetup() {
+            const interests = Array.from(document.querySelectorAll('.interest-tag.selected')).map(tag => {
+                return tag.querySelector('span:last-child').textContent.trim();
+            });
+            
+            userProfile = {
+                ...userProfile,
+                name: document.getElementById('userName').value || userProfile.name || 'Usuário',
+                profession: document.getElementById('userProfession').value || 'Profissional',
+                bio: document.getElementById('userBio').value || 'Olá! Estou usando o WiFi Presence.',
+                whatsapp: document.getElementById('userWhatsapp').value || '',
+                instagram: document.getElementById('userInstagram').value || '',
+                interests: interests
+            };
+
+            localStorage.setItem('wifiPresenceProfile', JSON.stringify(userProfile));
+            localStorage.setItem('wifiPresenceNetwork', currentNetwork);
+            localStorage.setItem('wifiPresenceNetworkName', currentNetworkName);
+            
+            showScreen('homeScreen');
+            loadUsers();
+        }
+
+        // Home Screen Functions
+        function loadUsers() {
+            const usersList = document.getElementById('usersList');
+            const welcomeName = document.getElementById('welcomeName');
+            const currentNetworkEl = document.getElementById('currentNetwork');
+            const onlineCount = document.getElementById('onlineCount');
+            
+            welcomeName.textContent = `Olá, ${userProfile.name}! 👑`;
+            currentNetworkEl.textContent = `Conectado em: ${currentNetworkName}`;
+            
+            const users = networkUsers[currentNetwork] || [];
+            onlineCount.textContent = `${users.length} pessoas`;
+            
+            usersList.innerHTML = '';
+            users.forEach(user => {
+                const userCard = createUserCard(user);
+                usersList.appendChild(userCard);
+            });
+        }
+
+        function createUserCard(user) {
+            const card = document.createElement('div');
+            card.className = 'user-card';
+            
+            const avatar = user.name.split(' ').map(n => n[0]).join('').toUpperCase();
+            
+            card.innerHTML = `
+                <div class="user-header">
+                    <div class="user-avatar">${avatar}</div>
+                    <div class="user-details">
+                        <h3>${user.name}</h3>
+                        <p>${user.profession}</p>
+                    </div>
+                    <div class="match-percentage">${user.match}% match</div>
+                </div>
+                
+                <div class="user-bio">${user.bio}</div>
+                
+                <div class="user-interests">
+                    ${user.interests.map(interest => `<span class="interest-badge">${interest}</span>`).join('')}
+                </div>
+                
+                <div class="social-links">
+                    <button class="social-btn whatsapp-btn" onclick="openWhatsApp('${user.whatsapp}')">
+                        📱 WhatsApp
+                    </button>
+                    <button class="social-btn instagram-btn" onclick="openInstagram('${user.instagram}')">
+                        📷 Instagram
+                    </button>
+                </div>
+            `;
+            
+            return card;
+        }
+
+        // Payment Functions
+        function approvePayment() {
+            const btn = event.target;
+            btn.textContent = '🔒 Processando...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                alert('✅ Pagamento Aprovado!\n\nR$ 85,00 debitado com sucesso\nProcessador: Stone\nCashback: R$ 1,70\nComprovante enviado por email');
+                document.getElementById('proximityPayment').style.display = 'none';
+            }, 2000);
+        }
+
+        function showSplitBill() {
+            document.getElementById('proximityPayment').style.display = 'none';
+            document.getElementById('splitBill').style.display = 'block';
+        }
+
+        function confirmSplit() {
+            const btn = event.target;
+            btn.textContent = 'Processando...';
+            btn.style.opacity = '0.7';
+            
+            setTimeout(() => {
+                alert('✅ Divisão Automática Concluída!\n\nSua parte: R$ 85,00\nProcessador: Stone\nCashback: R$ 1,70\n\nTodos foram notificados e confirmaram o pagamento!');
+                btn.textContent = '✅ Pago - Divisão Completa';
+                btn.style.background = '#00b894';
+                btn.disabled = true;
+            }, 2500);
+        }
+
+        // Social Functions
+        function openWhatsApp(phone) {
+            const message = encodeURIComponent('Olá! Vi seu perfil no WiFi Presence. Gostaria de conversar!');
+            window.open(`https://wa.me/${phone.replace(/\D/g, '')}?text=${message}`, '_blank');
+        }
+
+        function openInstagram(username) {
+            const cleanUsername = username.replace('@', '');
+            window.open(`https://instagram.com/${cleanUsername}`, '_blank');
+        }
+
+        // Settings Functions
+        function openSettings() {
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function toggleSetting(element) {
+            element.classList.toggle('active');
+        }
+
+        function logout() {
+            localStorage.clear();
+            currentNetwork = '';
+            currentNetworkName = '';
+            userProfile = {};
+            isLoggedIn = false;
+            
+            showScreen('loginScreen');
+            closeSettings();
+        }
+
+        // Load saved data
+        window.addEventListener('load', function() {
+            const savedProfile = localStorage.getItem('wifiPresenceProfile');
+            const savedNetwork = localStorage.getItem('wifiPresenceNetwork');
+            const savedNetworkName = localStorage.getItem('wifiPresenceNetworkName');
+            
+            if (savedProfile && savedNetwork) {
+                userProfile = JSON.parse(savedProfile);
+                currentNetwork = savedNetwork;
+                currentNetworkName = savedNetworkName;
+                isLoggedIn = true;
+                showScreen('homeScreen');
+                loadUsers();
+            }
+        });
+    </script>
+</body>
+</html>
